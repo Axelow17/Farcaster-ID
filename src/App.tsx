@@ -157,12 +157,20 @@ const App: React.FC = () => {
 
   const handleDownloadCard = () => {
     if (cardRef.current) {
-      htmlToImage.toPng(cardRef.current)
-        .then((dataUrl) => {
-          const link = document.createElement('a');
-          link.download = 'farcaster-card.png';
-          link.href = dataUrl;
-          link.click();
+      htmlToImage.toBlob(cardRef.current)
+        .then((blob) => {
+          if (blob) {
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'farcaster-card.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+          } else {
+            alert('Failed to generate image. Please try again.');
+          }
         })
         .catch((error) => {
           console.error('Error generating image:', error);
