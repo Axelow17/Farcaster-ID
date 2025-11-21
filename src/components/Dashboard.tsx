@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, forwardRef } from "react";
 import { DashboardUser, RecentCast } from "../Types";
 import QRCode from 'qrcode';
 
@@ -25,13 +25,13 @@ const formatTimestamp = (iso: string) => {
   });
 };
 
-export const Dashboard: React.FC<DashboardProps> = ({
+export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
   user,
   recentCasts,
   onMint,
   onShare,
   onDownloadCard
-}) => {
+}, ref) => {
   const hasRealActivity = recentCasts && recentCasts.length > 0;
   const [qrCodeUrl, setQrCodeUrl] = useState<string>('');
 
@@ -44,7 +44,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
   }, [user.username]);
 
   return (
-    <div className="fc-app-root">
+    <div ref={ref} className="fc-app-root">
       <div className="fc-app-shell">
         {/* HEADER */}
         <header className="fc-header">

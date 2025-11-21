@@ -208,15 +208,14 @@ const App: React.FC = () => {
   }
 
   return (
-    <div ref={cardRef}>
-      <Dashboard
-        user={user}
-        recentCasts={recentCasts}
-        onMint={handleMint}
-        onShare={handleShare}
-        onDownloadCard={handleDownloadCard}
-      />
-    </div>
+    <Dashboard
+      ref={cardRef}
+      user={user}
+      recentCasts={recentCasts}
+      onMint={handleMint}
+      onShare={handleShare}
+      onDownloadCard={handleDownloadCard}
+    />
   );
 };
 
