@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { sdk } from "@farcaster/miniapp-sdk";
-import { DashboardUser, RecentCast } from "./types";
+import { DashboardUser, RecentCast } from "./Types";
 import { Dashboard } from "./components/Dashboard";
 
 const MINIAPP_URL =
-  import.meta.env.VITE_MINIAPP_URL || "https://your-app-url.vercel.app";
+  import.meta.env.VITE_MINIAPP_URL || "https://farcaster-dashboard-id.vercel.app";
 const MINT_URL =
   import.meta.env.VITE_MINT_URL || `${MINIAPP_URL}/mint`; // your mint page / dapp URL
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { DashboardUser, RecentCast } from "../types";
+import { DashboardUser, RecentCast } from "../Types";
 
 type DashboardProps = {
   user: DashboardUser;
