@@ -324,4 +324,4 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
       </div>
     </div>
   );
-};
+});
