@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Farcaster Dashboard ID</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+
+    <!-- Mini App embed in Farcaster/Base -->
+    <meta
+      name="fc:miniapp"
+      content='{
+        "version":"next",
+        "imageUrl":"https://your-app-url.vercel.app/og-image.png",
+        "button":{
+          "title":"Open Dashboard",
+          "action":{
+            "type":"launch_miniapp",
+            "name":"Farcaster Dashboard ID",
+            "url":"https://your-app-url.vercel.app"
+          }
+        }
+      }'
+    />
+
+    <!-- Standard Open Graph preview -->
+    <meta property="og:title" content="Farcaster Dashboard ID" />
+    <meta
+      property="og:description"
+      content="View your Farcaster profile, stats, and turn your ID card into an NFT."
+    />
+    <meta
+      property="og:image"
+      content="https://your-app-url.vercel.app/og-image.png"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
