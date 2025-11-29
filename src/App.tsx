@@ -5,7 +5,7 @@ import { Dashboard } from "./components/Dashboard";
 import * as htmlToImage from 'html-to-image';
 
 const MINIAPP_URL =
-  import.meta.env.VITE_MINIAPP_URL || "https://farcaster-dashboard-id-5rgh.vercel.app";
+  import.meta.env.VITE_MINIAPP_URL || "https://farcaster-id-one.vercel.app";
 
 const NEYNAR_API_KEY = import.meta.env.VITE_NEYNAR_API_KEY;
 
@@ -76,29 +76,26 @@ const App: React.FC = () => {
     }
 
     // 2) Recent casts
-    const feedUrl = `https://api.neynar.com/v2/farcaster/feed?feed_type=filter&filter_type=fids&fids=${fid}&with_recasts=false&limit=100`;
-    const feedRes = await fetch(feedUrl, { headers });
-    if (!feedRes.ok) {
-      console.warn("Failed to fetch Neynar feed", await feedRes.text());
+    const castsUrl = `https://api.neynar.com/v2/farcaster/casts?fid=${fid}&limit=5`;
+    const castsRes = await fetch(castsUrl, { headers });
+    if (!castsRes.ok) {
+      console.warn("Failed to fetch Neynar casts", await castsRes.text());
     } else {
-      const feed = await feedRes.json();
+      const castsData = await castsRes.json();
       const casts: RecentCast[] =
-        feed.casts?.slice(0, 5).map((c: any) => ({
+        castsData.result?.casts?.map((c: any) => ({
           hash: c.hash,
           text: c.text ?? "",
           timestamp: c.timestamp,
-          likes: c.reactions?.likes_count ?? 0,
-          recasts: c.reactions?.recasts_count ?? 0
+          likes: c.reactions?.likes ?? 0,
+          recasts: c.reactions?.recasts ?? 0
         })) ?? [];
       setRecentCasts(casts);
 
-      // Calculate castsCount and reactionsCount
-      const allCasts = feed.casts ?? [];
-      const totalReactions = allCasts.reduce((sum: number, c: any) => sum + (c.reactions?.likes_count ?? 0) + (c.reactions?.recasts_count ?? 0), 0);
-
+      // Calculate castsCount and reactionsCount from bulk if needed, but for now use length
       setUser((prev) => {
         if (!prev) return prev;
-        return { ...prev, castsCount: allCasts.length, reactionsCount: totalReactions };
+        return { ...prev, castsCount: castsData.result?.total ?? prev.castsCount };
       });
     }
   };

@@ -18,6 +18,11 @@ const formatTimestamp = (iso: string) => {
   });
 };
 
+const formatAddress = (address?: string) => {
+  if (!address) return "Not connected";
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+};
+
 export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
   user,
   recentCasts,
@@ -47,6 +52,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                   src={user.avatarUrl}
                   alt={user.displayName}
                   className="fc-avatar-img"
+                  crossOrigin="anonymous"
                 />
               ) : (
                 <div className="fc-avatar-placeholder">
@@ -139,7 +145,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
 
               <div className="fc-idcard-header">
                 <div className="fc-idcard-logo">
-                  <img src="https://farcaster.xyz/logo.png" alt="Farcaster" className="fc-idcard-logo-icon" />
+                  <img src="https://farcaster.xyz/logo.png" alt="Farcaster" className="fc-idcard-logo-icon" crossOrigin="anonymous" />
                 </div>
                 <div>
                   <div className="fc-idcard-title">
@@ -159,6 +165,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                         src={user.avatarUrl}
                         alt={user.displayName}
                         className="fc-idcard-photo-img"
+                        crossOrigin="anonymous"
                       />
                     ) : (
                       <div className="fc-idcard-photo-placeholder">
@@ -205,14 +212,14 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                   <div className="fc-idcard-field">
                     <span className="fc-idcard-label">Primary Wallet</span>
                     <span className="fc-idcard-value">
-                      {user.primaryAddress || "Not connected"}
+                      {formatAddress(user.primaryAddress)}
                     </span>
                   </div>
                 </div>
 
                 <div className="fc-idcard-qr-col">
                   <div className="fc-idcard-qr">
-                    <img src={qrCodeUrl} alt="QR Code" className="fc-qr-img" />
+                    <img src={qrCodeUrl} alt="QR Code" className="fc-qr-img" crossOrigin="anonymous" />
                   </div>
                   <span className="fc-idcard-qr-caption">
                     Scan on Farcaster
