@@ -344,9 +344,35 @@ const App: React.FC = () => {
       }
 
       // Create share text
-      const text = user ?
-        `🚀 Farcaster ID Check! My Neynar Score: ${user.neynarScore?.toFixed(2) ?? 'N/A'} | ${user.followersCount ?? 0} followers | ${user.castsCount ?? 0} casts | @${user.username}` :
-        "I just checked my Farcaster ID card on Farcaster ID 🪪✨. Try yours too!";
+      const text = user ? (() => {
+        const score = user.neynarScore?.toFixed(2) ?? 'N/A';
+        const followers = user.followersCount ?? 0;
+        const following = user.followingCount ?? 0;
+        const casts = user.castsCount ?? 0;
+        const reactions = user.reactionsCount ?? 0;
+        
+        // Create engaging share text with all stats
+        let shareText = `🚀 Farcaster ID Check! Just minted my digital identity card 🪪✨\n\n`;
+        shareText += `📊 Stats: Neynar Score ${score} | FID #${user.fid}\n`;
+        shareText += `👥 ${followers} followers | ${following} following\n`;
+        shareText += `📝 ${casts} casts | ${reactions} reactions\n`;
+        shareText += `🏷️ @${user.username}`;
+        
+        // Add location if available
+        if (user.location) {
+          shareText += ` | 📍 ${user.location}`;
+        }
+        
+        // Add bio preview if available (truncated)
+        if (user.bio && user.bio.length > 0) {
+          const bioPreview = user.bio.length > 50 ? user.bio.substring(0, 47) + '...' : user.bio;
+          shareText += `\n\n"${bioPreview}"`;
+        }
+        
+        shareText += `\n\nCheck out your own Farcaster ID card! 🪄 #Farcaster #Web3 #Identity`;
+        
+        return shareText;
+      })() : "I just checked my Farcaster ID card on Farcaster ID 🪪✨. Try yours too!";
 
       console.log('Composing cast with:', { text, embeds });
 
