@@ -138,6 +138,67 @@ const App: React.FC = () => {
     void init();
   }, []);
 
+  // Setup embed meta tag for sharing the card
+  useEffect(() => {
+    const setupEmbedMetaTag = async () => {
+      if (!user || !cardRef.current || !NEYNAR_API_KEY) return;
+
+      try {
+        // Generate card image for embed
+        const blob = await htmlToImage.toBlob(cardRef.current);
+        if (blob) {
+          const formData = new FormData();
+          formData.append('file', blob, 'farcaster-card-embed.png');
+
+          const uploadRes = await fetch('https://api.neynar.com/v2/farcaster/media', {
+            method: 'POST',
+            headers: {
+              'x-api-key': NEYNAR_API_KEY,
+            },
+            body: formData,
+          });
+
+          if (uploadRes.ok) {
+            const uploadData = await uploadRes.json();
+            if (uploadData.url) {
+              // Create embed metadata
+              const embedData = {
+                version: "1",
+                imageUrl: uploadData.url,
+                button: {
+                  title: "View My Farcaster ID",
+                  action: {
+                    type: "launch_miniapp",
+                    url: MINIAPP_URL,
+                    name: "Farcaster ID",
+                    splashImageUrl: `${MINIAPP_URL}/splash.png`,
+                    splashBackgroundColor: "#020617"
+                  }
+                }
+              };
+
+              // Add meta tag to document head
+              const metaTag = document.createElement('meta');
+              metaTag.name = 'fc:miniapp';
+              metaTag.content = JSON.stringify(embedData);
+              document.head.appendChild(metaTag);
+
+              // Also add backward compatibility
+              const frameMetaTag = document.createElement('meta');
+              frameMetaTag.name = 'fc:frame';
+              frameMetaTag.content = JSON.stringify(embedData);
+              document.head.appendChild(frameMetaTag);
+            }
+          }
+        }
+      } catch (error) {
+        console.warn('Failed to setup embed meta tag:', error);
+      }
+    };
+
+    setupEmbedMetaTag();
+  }, [user, NEYNAR_API_KEY, MINIAPP_URL]);
+
   const handleShare = async () => {
     try {
       let embeds: string[] = [MINIAPP_URL];
