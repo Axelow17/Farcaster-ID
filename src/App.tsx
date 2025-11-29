@@ -18,7 +18,7 @@ const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
 // PNG generation method - can be switched easily
 type PngMethod = 'html2canvas' | 'html-to-image' | 'dom-to-image';
-const PNG_METHOD: PngMethod = 'html2canvas' as PngMethod; // Change this to: 'html2canvas', 'html-to-image', or 'dom-to-image'
+const PNG_METHOD: PngMethod = 'html-to-image' as PngMethod; // Change this to: 'html2canvas', 'html-to-image', or 'dom-to-image'
 
 // Utility function to generate PNG blob from HTML element
 const generatePngBlob = async (element: HTMLElement): Promise<Blob | null> => {
@@ -114,9 +114,11 @@ const uploadToCloudinary = async (element: HTMLElement): Promise<string | null> 
 
     if (uploadResponse.ok) {
       const uploadData = await uploadResponse.json();
+      console.log('Cloudinary upload success:', uploadData);
       return uploadData.secure_url;
     } else {
-      console.error('Cloudinary upload failed:', await uploadResponse.text());
+      const errorText = await uploadResponse.text();
+      console.error('Cloudinary upload failed:', uploadResponse.status, errorText);
       return null;
     }
   } catch (error) {
