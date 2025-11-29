@@ -1,13 +1,73 @@
 import React, { useEffect, useState, useRef } from "react";
 import { sdk } from "@farcaster/miniapp-sdk";
-import { DashboardUser, RecentCast } from "./Types";
+import { DashboardUser, RecentCast } from "./types";
 import { Dashboard } from "./components/Dashboard";
 import * as htmlToImage from 'html-to-image';
+import html2canvas from 'html2canvas';
+import domtoimage from 'dom-to-image';
 
 const MINIAPP_URL =
   import.meta.env.VITE_MINIAPP_URL || "https://farcaster-id-one.vercel.app";
 
 const NEYNAR_API_KEY = import.meta.env.VITE_NEYNAR_API_KEY;
+
+// PNG generation method - can be switched easily
+type PngMethod = 'html2canvas' | 'html-to-image' | 'dom-to-image';
+const PNG_METHOD: PngMethod = 'html2canvas'; // Change this to: 'html2canvas', 'html-to-image', or 'dom-to-image'
+
+// Utility function to generate PNG blob from HTML element
+const generatePngBlob = async (element: HTMLElement): Promise<Blob | null> => {
+  try {
+    switch (PNG_METHOD) {
+      case 'html2canvas':
+        const canvas = await html2canvas(element, {
+          backgroundColor: '#020617',
+          width: 424,
+          height: 695,
+          scale: 2,
+          useCORS: true,
+          allowTaint: false,
+          logging: false,
+        });
+        return new Promise((resolve) => {
+          canvas.toBlob(resolve, 'image/png', 1.0);
+        });
+
+      case 'html-to-image':
+        return await htmlToImage.toBlob(element, {
+          backgroundColor: '#020617',
+          width: 424,
+          height: 695,
+        });
+
+      case 'dom-to-image':
+        return await domtoimage.toBlob(element, {
+          bgcolor: '#020617',
+          width: 424,
+          height: 695,
+          quality: 1.0,
+        });
+
+      default:
+        console.warn(`Unknown PNG method: ${PNG_METHOD}, falling back to html2canvas`);
+        const fallbackCanvas = await html2canvas(element, {
+          backgroundColor: '#020617',
+          width: 424,
+          height: 695,
+          scale: 2,
+          useCORS: true,
+          allowTaint: false,
+          logging: false,
+        });
+        return new Promise((resolve) => {
+          fallbackCanvas.toBlob(resolve, 'image/png', 1.0);
+        });
+    }
+  } catch (error) {
+    console.error(`Error generating PNG with ${PNG_METHOD}:`, error);
+    return null;
+  }
+};
 
 const App: React.FC = () => {
   const [user, setUser] = useState<DashboardUser | null>(null);
@@ -16,9 +76,13 @@ const App: React.FC = () => {
   );
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [sharing, setSharing] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const loadNeynarData = async (fid: number) => {
+  const loadNeynarData = async (fid: number, showLoading = false) => {
+    if (showLoading) {
+      setRecentCasts(undefined); // Reset to show loading state
+    }
     if (!NEYNAR_API_KEY) {
       console.warn(
         "VITE_NEYNAR_API_KEY is not set – skipping Neynar integration."
@@ -44,7 +108,14 @@ const App: React.FC = () => {
           const base = prev ?? {
             fid,
             username: u.username ?? `user-${fid}`,
-            displayName: u.display_name ?? u.username ?? `FID ${fid}`
+            displayName: u.display_name ?? u.username ?? `FID ${fid}`,
+            avatarUrl: undefined,
+            followersCount: undefined,
+            followingCount: undefined,
+            bio: undefined,
+            location: undefined,
+            primaryAddress: undefined,
+            neynarScore: undefined
           };
 
           const locAddress = u.profile?.location?.address;
@@ -75,27 +146,52 @@ const App: React.FC = () => {
       }
     }
 
-    // 2) Recent casts
-    const castsUrl = `https://api.neynar.com/v2/farcaster/casts?fid=${fid}&limit=5`;
+    // 2) Recent casts - get user's own casts with reactions
+    const castsUrl = `https://api.neynar.com/v2/farcaster/casts?fid=${fid}&limit=5&author_fid=${fid}`;
     const castsRes = await fetch(castsUrl, { headers });
     if (!castsRes.ok) {
       console.warn("Failed to fetch Neynar casts", await castsRes.text());
+      // Set empty array so we don't show loading forever
+      setRecentCasts([]);
     } else {
       const castsData = await castsRes.json();
+      console.log("Casts API response:", castsData); // Debug log
+
       const casts: RecentCast[] =
-        castsData.result?.casts?.map((c: any) => ({
-          hash: c.hash,
-          text: c.text ?? "",
-          timestamp: c.timestamp,
-          likes: c.reactions?.likes ?? 0,
-          recasts: c.reactions?.recasts ?? 0
-        })) ?? [];
+        castsData.result?.casts?.map((c: any) => {
+          // Handle different possible reaction data structures
+          const likes = c.reactions?.likes_count ??
+                       c.reactions?.likes ??
+                       c.like_count ??
+                       c.likes ??
+                       0;
+          const recasts = c.reactions?.recasts_count ??
+                          c.reactions?.recasts ??
+                          c.recast_count ??
+                          c.recasts ??
+                          0;
+
+          return {
+            hash: c.hash,
+            text: c.text ?? "",
+            timestamp: c.timestamp,
+            likes: likes,
+            recasts: recasts
+          };
+        }) ?? [];
+
+      console.log("Processed casts with real reactions:", casts); // Debug log
       setRecentCasts(casts);
 
-      // Calculate castsCount and reactionsCount from bulk if needed, but for now use length
+      // Calculate castsCount and reactionsCount from real data
       setUser((prev) => {
         if (!prev) return prev;
-        return { ...prev, castsCount: castsData.result?.total ?? prev.castsCount };
+        const totalReactions = casts.reduce((sum, cast) => sum + (cast.likes || 0) + (cast.recasts || 0), 0);
+        return {
+          ...prev,
+          castsCount: castsData.result?.total ?? prev.castsCount ?? casts.length,
+          reactionsCount: totalReactions
+        };
       });
     }
   };
@@ -192,7 +288,7 @@ const App: React.FC = () => {
           }
         }
       } catch (error) {
-        console.warn('Failed to setup embed meta tag:', error);
+        console.error(error);
       }
     };
 
@@ -200,46 +296,80 @@ const App: React.FC = () => {
   }, [user, NEYNAR_API_KEY, MINIAPP_URL]);
 
   const handleShare = async () => {
+    if (sharing) return; // Prevent multiple simultaneous shares
+
     try {
+      setSharing(true);
       let embeds: string[] = [MINIAPP_URL];
+      let cardImageUrl: string | null = null;
 
+      // Try to generate and upload card image for rich embed
       if (NEYNAR_API_KEY && cardRef.current) {
-        // Generate image blob
-        const blob = await htmlToImage.toBlob(cardRef.current);
-        if (blob) {
-          // Upload to Neynar
-          const formData = new FormData();
-          formData.append('file', blob, 'farcaster-card.png');
+        try {
+          console.log('Generating card image for share...');
+          const blob = await generatePngBlob(cardRef.current);
 
-          const uploadRes = await fetch('https://api.neynar.com/v2/farcaster/media', {
-            method: 'POST',
-            headers: {
-              'x-api-key': NEYNAR_API_KEY,
-            },
-            body: formData,
-          });
+          if (blob) {
+            console.log('Uploading card image to Neynar...');
+            const formData = new FormData();
+            formData.append('file', blob, 'farcaster-card-share.png');
 
-          if (uploadRes.ok) {
-            const uploadData = await uploadRes.json();
-            if (uploadData.url) {
-              embeds = user ? [uploadData.url, `https://warpcast.com/${user.username}`] : [uploadData.url, MINIAPP_URL];
+            const uploadRes = await fetch('https://api.neynar.com/v2/farcaster/media', {
+              method: 'POST',
+              headers: {
+                'x-api-key': NEYNAR_API_KEY,
+              },
+              body: formData,
+            });
+
+            if (uploadRes.ok) {
+              const uploadData = await uploadRes.json();
+              if (uploadData.url) {
+                cardImageUrl = uploadData.url;
+                embeds = user ? [cardImageUrl, `@${user.username}`] : [cardImageUrl, MINIAPP_URL];
+                console.log('Card image uploaded successfully:', cardImageUrl);
+              } else {
+                console.warn('Upload response missing URL:', uploadData);
+              }
+            } else {
+              console.warn('Card image upload failed:', await uploadRes.text());
             }
           } else {
-            console.warn('Failed to upload image', await uploadRes.text());
+            console.warn('Failed to generate card image blob');
           }
+        } catch (imageError) {
+          console.error('Error generating/uploading card image:', imageError);
+          // Continue with text-only share
         }
       }
 
-      const text = user ? 
-        `🚀 Farcaster Dashboard Check! My Neynar Score: ${user.neynarScore?.toFixed(2) ?? 'N/A'} | ${user.followersCount ?? 0} followers | ${user.castsCount ?? 0} casts | @${user.username} | warpcast.com/${user.username}` :
+      // Create share text
+      const text = user ?
+        `🚀 Farcaster ID Check! My Neynar Score: ${user.neynarScore?.toFixed(2) ?? 'N/A'} | ${user.followersCount ?? 0} followers | ${user.castsCount ?? 0} casts | @${user.username}` :
         "I just checked my Farcaster ID card on Farcaster ID 🪪✨. Try yours too!";
+
+      console.log('Composing cast with:', { text, embeds });
+
+      // Compose the cast
       await sdk.actions.composeCast({
         text,
         embeds: embeds as any
       });
+
+      console.log('Cast shared successfully!');
+      alert('Cast shared successfully! 🎉');
+
     } catch (e) {
-      console.error("Failed to share", e);
+      console.error('Failed to share cast:', e);
+      alert('Failed to share cast. Please try again.');
+    } finally {
+      setSharing(false);
     }
+  };
+
+  const handleRefreshData = async () => {
+    if (!user) return;
+    await loadNeynarData(user.fid, true);
   };
 
   const handleDownloadCard = async () => {
@@ -249,33 +379,23 @@ const App: React.FC = () => {
     }
 
     try {
-      // Use toCanvas for better quality and control
-      const canvas = await htmlToImage.toCanvas(cardRef.current, {
-        backgroundColor: '#020617', // Match the app background
-        width: 424, // Match the app width
-        height: 695, // Approximate height
-        style: {
-          transform: 'scale(1)', // Ensure no scaling issues
-        },
-      });
+      // Use the unified PNG generation function
+      const blob = await generatePngBlob(cardRef.current);
 
-      // Convert to blob
-      canvas.toBlob((blob) => {
-        if (blob) {
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = `farcaster-id-card-${user?.username || 'user'}.png`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          URL.revokeObjectURL(url);
-        } else {
-          alert('Failed to generate image. Please try again.');
-        }
-      }, 'image/png', 1.0); // High quality PNG
+      if (blob) {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `farcaster-id-card-${user?.username || 'user'}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } else {
+        alert('Failed to generate image. Please try again.');
+      }
     } catch (error) {
-      console.error('Error generating image:', error);
+      console.error(error);
       alert('Failed to download card. Please check console for details.');
     }
   };
@@ -323,6 +443,8 @@ const App: React.FC = () => {
       recentCasts={recentCasts}
       onShare={handleShare}
       onDownloadCard={handleDownloadCard}
+      onRefreshData={handleRefreshData}
+      sharing={sharing}
     />
   );
 };

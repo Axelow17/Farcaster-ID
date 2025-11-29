@@ -1,5 +1,5 @@
 import React, { useEffect, useState, forwardRef } from "react";
-import { DashboardUser, RecentCast } from "../Types";
+import { DashboardUser, RecentCast } from "../types";
 import QRCode from 'qrcode';
 
 type DashboardProps = {
@@ -7,6 +7,8 @@ type DashboardProps = {
   recentCasts?: RecentCast[];
   onShare?: () => void;
   onDownloadCard?: () => void;
+  onRefreshData?: () => void;
+  sharing?: boolean;
 };
 
 const formatTimestamp = (iso: string) => {
@@ -27,16 +29,19 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
   user,
   recentCasts,
   onShare,
-  onDownloadCard
+  onDownloadCard,
+  onRefreshData,
+  sharing = false
 }, ref) => {
   const hasRealActivity = recentCasts && recentCasts.length > 0;
+  const isLoadingCasts = recentCasts === undefined; // undefined means still loading
   const [qrCodeUrl, setQrCodeUrl] = useState<string>('');
 
   useEffect(() => {
     if (user.username) {
       QRCode.toDataURL(`https://warpcast.com/${user.username}`)
         .then(url => setQrCodeUrl(url))
-        .catch(err => console.error('Error generating QR code:', err));
+        .catch(err => setQrCodeUrl(''));
     }
   }, [user.username]);
 
@@ -141,6 +146,23 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
 
           <div className="fc-idcard-wrap">
             <div className="fc-idcard">
+              {/* Enhanced Border Glow */}
+              <div className="fc-idcard-glow"></div>
+
+              {/* Corner Ornaments */}
+              <div className="fc-idcard-corner-tl"></div>
+              <div className="fc-idcard-corner-tr"></div>
+              <div className="fc-idcard-corner-bl"></div>
+              <div className="fc-idcard-corner-br"></div>
+
+              {/* Animated Particles */}
+              <div className="fc-particle fc-particle-1"></div>
+              <div className="fc-particle fc-particle-2"></div>
+              <div className="fc-particle fc-particle-3"></div>
+              <div className="fc-particle fc-particle-4"></div>
+              <div className="fc-particle fc-particle-5"></div>
+              <div className="fc-particle fc-particle-6"></div>
+
               <div className="fc-idcard-strip" />
 
               <div className="fc-idcard-header">
@@ -204,16 +226,23 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
 
                   <div className="fc-idcard-field">
                     <span className="fc-idcard-label">Neynar Score</span>
-                    <span className="fc-idcard-value">
-                      {user.neynarScore?.toFixed(2) ?? "—"}
-                    </span>
-                  </div>
-
-                  <div className="fc-idcard-field">
-                    <span className="fc-idcard-label">Primary Wallet</span>
-                    <span className="fc-idcard-value">
-                      {formatAddress(user.primaryAddress)}
-                    </span>
+                    <div className="fc-idcard-value">
+                      {user.neynarScore ? (
+                        <div className="fc-score-with-badge">
+                          <span className="fc-score-badge">
+                            ⭐ {user.neynarScore.toFixed(2)}
+                          </span>
+                          <img
+                            src="/farcaster-logo.png"
+                            alt="Neynar"
+                            className="fc-score-logo"
+                            crossOrigin="anonymous"
+                          />
+                        </div>
+                      ) : (
+                        "—"
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -230,42 +259,40 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
           </div>
         </section>
 
-        {/* ACTION BUTTONS */}
-        <section className="fc-section">
-          <div className="fc-actions">
-            <button
-              className="fc-btn fc-btn-secondary"
-              type="button"
-              onClick={onShare}
-            >
-              <span className="fc-btn-icon">📣</span>
-              <span>Share ID to Farcaster</span>
-            </button>
-
-            <button
-              className="fc-btn fc-btn-ghost"
-              type="button"
-              onClick={onDownloadCard}
-            >
-              <span className="fc-btn-icon">⬇️</span>
-              <span>Download Card</span>
-            </button>
-          </div>
-        </section>
-
         {/* RECENT ACTIVITY */}
         <section className="fc-section fc-section-last">
           <div className="fc-section-header">
             <div>
               <div className="fc-section-title">Recent Activity</div>
               <div className="fc-section-subtitle">
-                Latest casts from your Farcaster account.
+                Latest casts from your Farcaster account with real likes & recasts.
               </div>
             </div>
+            {onRefreshData && (
+              <button
+                className="fc-refresh-btn"
+                onClick={onRefreshData}
+                title="Refresh real data"
+              >
+                🔄
+              </button>
+            )}
           </div>
 
           <div className="fc-activity-list">
-            {hasRealActivity ? (
+            {isLoadingCasts ? (
+              <div className="fc-activity-item">
+                <div className="fc-activity-dot" />
+                <div className="fc-activity-main">
+                  <div className="fc-activity-text">
+                    Loading your recent casts...
+                  </div>
+                  <div className="fc-activity-meta">
+                    Please wait
+                  </div>
+                </div>
+              </div>
+            ) : hasRealActivity ? (
               recentCasts!.map((cast) => (
                 <div className="fc-activity-item" key={cast.hash}>
                   <div className="fc-activity-dot" />
@@ -286,10 +313,10 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                   <div className="fc-activity-dot" />
                   <div className="fc-activity-main">
                     <div className="fc-activity-text">
-                      "Sample cast: testing my Farcaster Dashboard mini app today 🚀"
+                      No recent casts found. Start casting on Farcaster to see your activity here! 🚀
                     </div>
                     <div className="fc-activity-meta">
-                      2h · 34 likes · 5 recasts
+                      Your casts will appear here
                     </div>
                   </div>
                 </div>
@@ -297,15 +324,39 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                   <div className="fc-activity-dot" />
                   <div className="fc-activity-main">
                     <div className="fc-activity-text">
-                      "Sample cast: just updated my avatar and bio on Farcaster ✨"
+                      "Sample: Just discovered this awesome Farcaster dashboard mini app! 🪪✨"
                     </div>
                     <div className="fc-activity-meta">
-                      Yesterday · 12 likes · 1 recast
+                      Sample · 42 likes · 8 recasts
                     </div>
                   </div>
                 </div>
               </>
             )}
+          </div>
+        </section>
+
+        {/* ACTION BUTTONS */}
+        <section className="fc-section fc-section-last">
+          <div className="fc-actions">
+            <button
+              className="fc-btn fc-btn-secondary"
+              type="button"
+              onClick={onShare}
+              disabled={sharing}
+            >
+              <span className="fc-btn-icon">{sharing ? "⏳" : "📣"}</span>
+              <span>{sharing ? "Sharing..." : "Share ID to Farcaster"}</span>
+            </button>
+
+            <button
+              className="fc-btn fc-btn-ghost"
+              type="button"
+              onClick={onDownloadCard}
+            >
+              <span className="fc-btn-icon">⬇️</span>
+              <span>Download Card</span>
+            </button>
           </div>
         </section>
       </div>
