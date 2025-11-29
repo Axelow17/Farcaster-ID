@@ -5,15 +5,20 @@ import { Dashboard } from "./components/Dashboard";
 import * as htmlToImage from 'html-to-image';
 import html2canvas from 'html2canvas';
 import domtoimage from 'dom-to-image';
+import { v2 as cloudinary } from 'cloudinary';
 
 const MINIAPP_URL =
   import.meta.env.VITE_MINIAPP_URL || "https://farcaster-id-one.vercel.app";
 
 const NEYNAR_API_KEY = import.meta.env.VITE_NEYNAR_API_KEY;
 
+// Cloudinary configuration
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+
 // PNG generation method - can be switched easily
 type PngMethod = 'html2canvas' | 'html-to-image' | 'dom-to-image';
-const PNG_METHOD: PngMethod = 'html2canvas'; // Change this to: 'html2canvas', 'html-to-image', or 'dom-to-image'
+const PNG_METHOD: PngMethod = 'html2canvas' as PngMethod; // Change this to: 'html2canvas', 'html-to-image', or 'dom-to-image'
 
 // Utility function to generate PNG blob from HTML element
 const generatePngBlob = async (element: HTMLElement): Promise<Blob | null> => {
@@ -65,6 +70,57 @@ const generatePngBlob = async (element: HTMLElement): Promise<Blob | null> => {
     }
   } catch (error) {
     console.error(`Error generating PNG with ${PNG_METHOD}:`, error);
+    return null;
+  }
+};
+
+// Utility function to upload PNG blob to Cloudinary
+const uploadToCloudinary = async (element: HTMLElement): Promise<string | null> => {
+  if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) {
+    console.warn('Cloudinary configuration missing');
+    return null;
+  }
+
+  try {
+    // Generate PNG blob
+    const blob = await generatePngBlob(element);
+    if (!blob) return null;
+
+    // Convert blob to base64
+    const base64Data = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+
+    // Remove data URL prefix
+    const base64Image = base64Data.split(',')[1];
+
+    // Upload to Cloudinary
+    const formData = new FormData();
+    formData.append('file', `data:image/png;base64,${base64Image}`);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    formData.append('public_id', `farcaster-id-card-share-${Date.now()}`);
+    formData.append('folder', 'farcaster-cards');
+
+    const uploadResponse = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
+
+    if (uploadResponse.ok) {
+      const uploadData = await uploadResponse.json();
+      return uploadData.secure_url;
+    } else {
+      console.error('Cloudinary upload failed:', await uploadResponse.text());
+      return null;
+    }
+  } catch (error) {
+    console.error('Error uploading to Cloudinary:', error);
     return null;
   }
 };
@@ -304,38 +360,17 @@ const App: React.FC = () => {
       let cardImageUrl: string | null = null;
 
       // Try to generate and upload card image for rich embed
-      if (NEYNAR_API_KEY && cardRef.current) {
+      if (cardRef.current) {
         try {
           console.log('Generating card image for share...');
-          const blob = await generatePngBlob(cardRef.current);
+          const cloudinaryUrl = await uploadToCloudinary(cardRef.current);
 
-          if (blob) {
-            console.log('Uploading card image to Neynar...');
-            const formData = new FormData();
-            formData.append('file', blob, 'farcaster-card-share.png');
-
-            const uploadRes = await fetch('https://api.neynar.com/v2/farcaster/media', {
-              method: 'POST',
-              headers: {
-                'x-api-key': NEYNAR_API_KEY,
-              },
-              body: formData,
-            });
-
-            if (uploadRes.ok) {
-              const uploadData = await uploadRes.json();
-              if (uploadData.url) {
-                cardImageUrl = uploadData.url;
-                embeds = user ? [cardImageUrl, `@${user.username}`] : [cardImageUrl, MINIAPP_URL];
-                console.log('Card image uploaded successfully:', cardImageUrl);
-              } else {
-                console.warn('Upload response missing URL:', uploadData);
-              }
-            } else {
-              console.warn('Card image upload failed:', await uploadRes.text());
-            }
+          if (cloudinaryUrl) {
+            cardImageUrl = cloudinaryUrl;
+            embeds = user ? [cardImageUrl, `@${user.username}`] : [cardImageUrl, MINIAPP_URL];
+            console.log('Card image uploaded to Cloudinary successfully:', cardImageUrl);
           } else {
-            console.warn('Failed to generate card image blob');
+            console.warn('Failed to upload card image to Cloudinary');
           }
         } catch (imageError) {
           console.error('Error generating/uploading card image:', imageError);
@@ -352,7 +387,7 @@ const App: React.FC = () => {
         const reactions = user.reactionsCount ?? 0;
         
         // Create engaging share text with all stats
-        let shareText = `🚀 Farcaster ID Check! Just minted my digital identity card 🪪✨\n\n`;
+        let shareText = `🚀 Farcaster ID Check! check my digital identity card 🪪✨\n\n`;
         shareText += `📊 Stats: Neynar Score ${score} | FID #${user.fid}\n`;
         shareText += `👥 ${followers} followers | ${following} following\n`;
         shareText += `📝 ${casts} casts | ${reactions} reactions\n`;
@@ -404,25 +439,62 @@ const App: React.FC = () => {
       return;
     }
 
+    if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) {
+      alert('Cloudinary configuration missing. Please check environment variables.');
+      return;
+    }
+
     try {
       // Use the unified PNG generation function
       const blob = await generatePngBlob(cardRef.current);
 
       if (blob) {
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `farcaster-id-card-${user?.username || 'user'}.png`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
+        // Convert blob to base64 for Cloudinary upload
+        const base64Data = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+
+        // Remove the data URL prefix to get just the base64 data
+        const base64Image = base64Data.split(',')[1];
+
+        // Upload to Cloudinary
+        const formData = new FormData();
+        formData.append('file', `data:image/png;base64,${base64Image}`);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+        formData.append('public_id', `farcaster-id-card-${user?.username || 'user'}-${Date.now()}`);
+        formData.append('folder', 'farcaster-cards');
+
+        const uploadResponse = await fetch(
+          `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
+          {
+            method: 'POST',
+            body: formData,
+          }
+        );
+
+        if (uploadResponse.ok) {
+          const uploadData = await uploadResponse.json();
+          const cloudinaryUrl = uploadData.secure_url;
+
+          // Copy URL to clipboard
+          await navigator.clipboard.writeText(cloudinaryUrl);
+
+          alert(`✅ Card uploaded to Cloudinary!\n📋 URL copied to clipboard:\n${cloudinaryUrl}`);
+          console.log('Cloudinary upload successful:', cloudinaryUrl);
+        } else {
+          const errorData = await uploadResponse.text();
+          console.error('Cloudinary upload failed:', errorData);
+          alert('Failed to upload card to Cloudinary. Please try again.');
+        }
       } else {
         alert('Failed to generate image. Please try again.');
       }
     } catch (error) {
-      console.error(error);
-      alert('Failed to download card. Please check console for details.');
+      console.error('Error uploading to Cloudinary:', error);
+      alert('Failed to upload card. Please check console for details.');
     }
   };
 
