@@ -5,15 +5,8 @@ import QRCode from 'qrcode';
 type DashboardProps = {
   user: DashboardUser;
   recentCasts?: RecentCast[];
-  onMint?: () => void;
   onShare?: () => void;
   onDownloadCard?: () => void;
-};
-
-const shortenAddress = (addr?: string) => {
-  if (!addr) return "Not connected";
-  if (addr.length <= 10) return addr;
-  return `${addr.slice(0, 6)}…${addr.slice(-4)}`;
 };
 
 const formatTimestamp = (iso: string) => {
@@ -28,7 +21,6 @@ const formatTimestamp = (iso: string) => {
 export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
   user,
   recentCasts,
-  onMint,
   onShare,
   onDownloadCard
 }, ref) => {
@@ -136,10 +128,9 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
             <div>
               <div className="fc-section-title">Farcaster Identity Card</div>
               <div className="fc-section-subtitle">
-                This ID card will be used as your NFT template when you mint.
+                Your personalized Farcaster identity card.
               </div>
             </div>
-            <span className="fc-tag fc-tag-primary">NFT Ready</span>
           </div>
 
           <div className="fc-idcard-wrap">
@@ -148,7 +139,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
 
               <div className="fc-idcard-header">
                 <div className="fc-idcard-logo">
-                  <span className="fc-idcard-logo-icon">◆</span>
+                  <img src="https://farcaster.xyz/logo.png" alt="Farcaster" className="fc-idcard-logo-icon" />
                 </div>
                 <div>
                   <div className="fc-idcard-title">
@@ -205,9 +196,16 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                   </div>
 
                   <div className="fc-idcard-field">
+                    <span className="fc-idcard-label">Neynar Score</span>
+                    <span className="fc-idcard-value">
+                      {user.neynarScore?.toFixed(2) ?? "—"}
+                    </span>
+                  </div>
+
+                  <div className="fc-idcard-field">
                     <span className="fc-idcard-label">Primary Wallet</span>
                     <span className="fc-idcard-value">
-                      {shortenAddress(user.primaryAddress)}
+                      {user.primaryAddress || "Not connected"}
                     </span>
                   </div>
                 </div>
@@ -221,19 +219,13 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                   </span>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
 
         {/* ACTION BUTTONS */}
         <section className="fc-section">
           <div className="fc-actions">
-            <button
-              className="fc-btn fc-btn-primary"
-              type="button"
-              onClick={onMint}
-            >
-              <span className="fc-btn-icon">🪪</span>
-              <span>Mint ID as NFT</span>
-            </button>
-
             <button
               className="fc-btn fc-btn-secondary"
               type="button"
@@ -287,8 +279,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                   <div className="fc-activity-dot" />
                   <div className="fc-activity-main">
                     <div className="fc-activity-text">
-                      “Sample cast: testing my Farcaster Dashboard mini app
-                      today 🚀”
+                      "Sample cast: testing my Farcaster Dashboard mini app today 🚀"
                     </div>
                     <div className="fc-activity-meta">
                       2h · 34 likes · 5 recasts
@@ -299,8 +290,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                   <div className="fc-activity-dot" />
                   <div className="fc-activity-main">
                     <div className="fc-activity-text">
-                      “Sample cast: just updated my avatar and bio on Farcaster
-                      ✨”
+                      "Sample cast: just updated my avatar and bio on Farcaster ✨"
                     </div>
                     <div className="fc-activity-meta">
                       Yesterday · 12 likes · 1 recast
