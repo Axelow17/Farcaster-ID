@@ -181,27 +181,41 @@ const App: React.FC = () => {
     }
   };
 
-  const handleDownloadCard = () => {
-    if (cardRef.current) {
-      htmlToImage.toBlob(cardRef.current)
-        .then((blob) => {
-          if (blob) {
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'farcaster-card.png';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-          } else {
-            alert('Failed to generate image. Please try again.');
-          }
-        })
-        .catch((error) => {
-          console.error('Error generating image:', error);
-          alert('Failed to download card. Please try again.');
-        });
+  const handleDownloadCard = async () => {
+    if (!cardRef.current) {
+      alert('Card not ready. Please try again.');
+      return;
+    }
+
+    try {
+      // Use toCanvas for better quality and control
+      const canvas = await htmlToImage.toCanvas(cardRef.current, {
+        backgroundColor: '#020617', // Match the app background
+        width: 424, // Match the app width
+        height: 695, // Approximate height
+        style: {
+          transform: 'scale(1)', // Ensure no scaling issues
+        },
+      });
+
+      // Convert to blob
+      canvas.toBlob((blob) => {
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `farcaster-id-card-${user?.username || 'user'}.png`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+        } else {
+          alert('Failed to generate image. Please try again.');
+        }
+      }, 'image/png', 1.0); // High quality PNG
+    } catch (error) {
+      console.error('Error generating image:', error);
+      alert('Failed to download card. Please check console for details.');
     }
   };
 
