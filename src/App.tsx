@@ -27,8 +27,6 @@ const generatePngBlob = async (element: HTMLElement): Promise<Blob | null> => {
       case 'html2canvas':
         const canvas = await html2canvas(element, {
           backgroundColor: '#020617',
-          width: 424,
-          height: 695,
           scale: 2,
           useCORS: true,
           allowTaint: false,
