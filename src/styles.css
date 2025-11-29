@@ -312,7 +312,6 @@ body {
   width: 30px;
   height: 30px;
   border-radius: 10px;
-  background: radial-gradient(circle at 20% 0, #4f46e5, #0f172a);
   display: flex;
   align-items: center;
   justify-content: center;

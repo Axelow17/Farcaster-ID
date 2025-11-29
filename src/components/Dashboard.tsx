@@ -145,7 +145,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
 
               <div className="fc-idcard-header">
                 <div className="fc-idcard-logo">
-                  <img src="https://farcaster.xyz/logo.png" alt="Farcaster" className="fc-idcard-logo-icon" crossOrigin="anonymous" />
+                  <img src="/icon.png" alt="Farcaster ID" className="fc-idcard-logo-icon" crossOrigin="anonymous" />
                 </div>
                 <div>
                   <div className="fc-idcard-title">
