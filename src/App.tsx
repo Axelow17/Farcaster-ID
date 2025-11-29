@@ -18,7 +18,7 @@ const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
 // PNG generation method - can be switched easily
 type PngMethod = 'html2canvas' | 'html-to-image' | 'dom-to-image';
-const PNG_METHOD: PngMethod = 'html-to-image' as PngMethod; // Change this to: 'html2canvas', 'html-to-image', or 'dom-to-image'
+const PNG_METHOD: PngMethod = 'html2canvas' as PngMethod; // Change this to: 'html2canvas', 'html-to-image', or 'dom-to-image'
 
 // Utility function to generate PNG blob from HTML element
 const generatePngBlob = async (element: HTMLElement): Promise<Blob | null> => {
@@ -339,7 +339,12 @@ const App: React.FC = () => {
       }
     };
 
-    setupEmbedMetaTag();
+    // Wait for images to load before generating
+    const timer = setTimeout(() => {
+      setupEmbedMetaTag();
+    }, 2000);
+
+    return () => clearTimeout(timer);
   }, [user, CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET, MINIAPP_URL]);
 
   const handleShare = async () => {
