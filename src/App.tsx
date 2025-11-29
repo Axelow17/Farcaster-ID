@@ -293,63 +293,52 @@ const App: React.FC = () => {
   // Setup embed meta tag for sharing the card
   useEffect(() => {
     const setupEmbedMetaTag = async () => {
-      if (!user || !cardRef.current || !NEYNAR_API_KEY) return;
+      if (!user || !cardRef.current || !CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) return;
 
       try {
-        // Generate card image for embed
-        const blob = await htmlToImage.toBlob(cardRef.current);
-        if (blob) {
-          const formData = new FormData();
-          formData.append('file', blob, 'farcaster-card-embed.png');
+        // Generate card image for embed using Cloudinary
+        const cloudinaryUrl = await uploadToCloudinary(cardRef.current);
 
-          const uploadRes = await fetch('https://api.neynar.com/v2/farcaster/media', {
-            method: 'POST',
-            headers: {
-              'x-api-key': NEYNAR_API_KEY,
-            },
-            body: formData,
-          });
-
-          if (uploadRes.ok) {
-            const uploadData = await uploadRes.json();
-            if (uploadData.url) {
-              // Create embed metadata
-              const embedData = {
-                version: "1",
-                imageUrl: uploadData.url,
-                button: {
-                  title: "View My Farcaster ID",
-                  action: {
-                    type: "launch_miniapp",
-                    url: MINIAPP_URL,
-                    name: "Farcaster ID",
-                    splashImageUrl: `${MINIAPP_URL}/splash.png`,
-                    splashBackgroundColor: "#020617"
-                  }
-                }
-              };
-
-              // Add meta tag to document head
-              const metaTag = document.createElement('meta');
-              metaTag.name = 'fc:miniapp';
-              metaTag.content = JSON.stringify(embedData);
-              document.head.appendChild(metaTag);
-
-              // Also add backward compatibility
-              const frameMetaTag = document.createElement('meta');
-              frameMetaTag.name = 'fc:frame';
-              frameMetaTag.content = JSON.stringify(embedData);
-              document.head.appendChild(frameMetaTag);
+        if (cloudinaryUrl) {
+          // Create embed metadata
+          const embedData = {
+            version: "1",
+            imageUrl: cloudinaryUrl,
+            button: {
+              title: "View My Farcaster ID",
+              action: {
+                type: "launch_miniapp",
+                url: MINIAPP_URL,
+                name: "Farcaster ID",
+                splashImageUrl: `${MINIAPP_URL}/splash.png`,
+                splashBackgroundColor: "#020617"
+              }
             }
-          }
+          };
+
+          // Add meta tag to document head
+          const metaTag = document.createElement('meta');
+          metaTag.name = 'fc:miniapp';
+          metaTag.content = JSON.stringify(embedData);
+          document.head.appendChild(metaTag);
+
+          // Also add backward compatibility
+          const frameMetaTag = document.createElement('meta');
+          frameMetaTag.name = 'fc:frame';
+          frameMetaTag.content = JSON.stringify(embedData);
+          document.head.appendChild(frameMetaTag);
+
+          console.log('Embed meta tags set up with Cloudinary image:', cloudinaryUrl);
+        } else {
+          console.warn('Failed to generate/upload card image for embed');
         }
       } catch (error) {
-        console.error(error);
+        console.error('Error setting up embed:', error);
       }
     };
 
     setupEmbedMetaTag();
-  }, [user, NEYNAR_API_KEY, MINIAPP_URL]);
+  }, [user, CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET, MINIAPP_URL]);
 
   const handleShare = async () => {
     if (sharing) return; // Prevent multiple simultaneous shares
