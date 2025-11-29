@@ -305,11 +305,11 @@ const App: React.FC = () => {
             version: "1",
             imageUrl: cloudinaryUrl,
             button: {
-              title: "View My Farcaster ID",
+              title: "Open Dashboard",
               action: {
                 type: "launch_miniapp",
                 url: MINIAPP_URL,
-                name: "Farcaster ID",
+                name: "Farcaster Dashboard ID",
                 splashImageUrl: `${MINIAPP_URL}/splash.png`,
                 splashBackgroundColor: "#020617"
               }
@@ -356,7 +356,7 @@ const App: React.FC = () => {
 
           if (cloudinaryUrl) {
             cardImageUrl = cloudinaryUrl;
-            embeds = user ? [cardImageUrl, `@${user.username}`] : [cardImageUrl, MINIAPP_URL];
+            embeds = user ? [cardImageUrl, MINIAPP_URL, `@${user.username}`] : [cardImageUrl, MINIAPP_URL];
             console.log('Card image uploaded to Cloudinary successfully:', cardImageUrl);
           } else {
             console.warn('Failed to upload card image to Cloudinary');
