@@ -82,8 +82,15 @@ const uploadToCloudinary = async (element: HTMLElement): Promise<string | null> 
   }
 
   try {
+    // Find the actual card element to capture
+    const cardElement = element.querySelector('.fc-idcard') as HTMLElement;
+    if (!cardElement) {
+      console.warn('Card element not found');
+      return null;
+    }
+
     // Generate PNG blob
-    const blob = await generatePngBlob(element);
+    const blob = await generatePngBlob(cardElement);
     if (!blob) return null;
 
     // Convert blob to base64
@@ -342,7 +349,7 @@ const App: React.FC = () => {
     // Wait for images to load before generating
     const timer = setTimeout(() => {
       setupEmbedMetaTag();
-    }, 2000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, [user, CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET, MINIAPP_URL]);
