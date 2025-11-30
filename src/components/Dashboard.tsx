@@ -375,9 +375,16 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                   </div>
 
                   <div className="fc-idcard-field">
-                    <span className="fc-idcard-label">Followers & Following</span>
+                    <span className="fc-idcard-label">Followers</span>
                     <span className="fc-idcard-value">
-                      Followers {user.followersCount ?? "—"} Following {user.followingCount ?? "—"}
+                      {user.followersCount ?? "—"}
+                    </span>
+                  </div>
+
+                  <div className="fc-idcard-field">
+                    <span className="fc-idcard-label">Following</span>
+                    <span className="fc-idcard-value">
+                      {user.followingCount ?? "—"}
                     </span>
                   </div>
                 </div>
