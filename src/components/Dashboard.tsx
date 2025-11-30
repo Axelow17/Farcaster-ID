@@ -41,6 +41,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
   const [hoveredStat, setHoveredStat] = useState<string | null>(null);
   const [clickedStat, setClickedStat] = useState<string | null>(null);
   const [isHeaderHovered, setIsHeaderHovered] = useState(false);
+  const [floatingElements, setFloatingElements] = useState<Array<{id: number, x: number, y: number, emoji: string}>>([]);
 
   useEffect(() => {
     if (user.username) {

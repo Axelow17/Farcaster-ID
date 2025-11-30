@@ -264,7 +264,8 @@ const App: React.FC = () => {
   useEffect(() => {
     const init = async () => {
       try {
-        const inMiniApp = await sdk.isInMiniApp();
+        // For development: bypass miniapp check and use mock data
+        const inMiniApp = true; // await sdk.isInMiniApp();
         if (!inMiniApp) {
           setError(
             "Open this mini app from inside a Farcaster/Base client to see your dashboard."
@@ -273,7 +274,16 @@ const App: React.FC = () => {
           return;
         }
 
-        const ctx = await sdk.context;
+        // Mock context for development
+        const ctx = {
+          user: {
+            fid: 12345,
+            username: "testuser",
+            displayName: "Test User",
+            pfpUrl: "https://example.com/avatar.png"
+          }
+        };
+        // const ctx = await sdk.context;
         const u = ctx.user;
 
         const baseUser: DashboardUser = {
@@ -287,7 +297,7 @@ const App: React.FC = () => {
 
         await loadNeynarData(u.fid);
 
-        await sdk.actions.ready();
+        // await sdk.actions.ready();
         setLoading(false);
       } catch (e) {
         console.error(e);
