@@ -26,14 +26,6 @@ body {
   box-sizing: border-box;
 }
 
-.fc-app-root.light {
-  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-}
-
-.fc-app-root.colorful {
-  background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
-}
-
 .fc-app-shell {
   width: 100%;
   max-width: 424px;
