@@ -343,6 +343,13 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                       #{user.fid ?? "—"}
                     </span>
                   </div>
+
+                  <div className="fc-idcard-field fc-field-technical">
+                    <span className="fc-idcard-label">⭐ Neynar Score</span>
+                    <span className="fc-idcard-value">
+                      {user.neynarScore ? user.neynarScore.toFixed(2) : "—"}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="fc-idcard-qr-col">
