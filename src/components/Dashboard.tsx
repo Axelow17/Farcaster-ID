@@ -347,6 +347,20 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                   </div>
 
                   <div className="fc-idcard-field">
+                    <span className="fc-idcard-label">Followers</span>
+                    <span className="fc-idcard-value">
+                      {user.followersCount ?? "—"}
+                    </span>
+                  </div>
+
+                  <div className="fc-idcard-field">
+                    <span className="fc-idcard-label">Following</span>
+                    <span className="fc-idcard-value">
+                      {user.followingCount ?? "—"}
+                    </span>
+                  </div>
+
+                  <div className="fc-idcard-field">
                     <span className="fc-idcard-label">FID</span>
                     <span className="fc-idcard-value">
                       #{user.fid ?? "—"}
@@ -372,20 +386,6 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                         "—"
                       )}
                     </div>
-                  </div>
-
-                  <div className="fc-idcard-field">
-                    <span className="fc-idcard-label">Followers</span>
-                    <span className="fc-idcard-value">
-                      {user.followersCount ?? "—"}
-                    </span>
-                  </div>
-
-                  <div className="fc-idcard-field">
-                    <span className="fc-idcard-label">Following</span>
-                    <span className="fc-idcard-value">
-                      {user.followingCount ?? "—"}
-                    </span>
                   </div>
                 </div>
 
