@@ -205,14 +205,7 @@ const App: React.FC = () => {
             neynarScore:
               typeof u.experimental?.neynar_user_score === "number"
                 ? u.experimental.neynar_user_score
-                : base.neynarScore,
-            dateOfBirth: u.registered_at ? (() => {
-              const date = new Date(u.registered_at);
-              const day = date.getDate();
-              const month = date.toLocaleDateString('en-US', { month: 'long' });
-              const year = date.getFullYear();
-              return `${day} ${month} ${year}`;
-            })() : undefined
+                : base.neynarScore
           };
         });
       }
@@ -394,21 +387,23 @@ const App: React.FC = () => {
         const followers = user.followersCount ?? 0;
         const following = user.followingCount ?? 0;
 
-        // Format account creation date as "Month Year"
-        const accountDate = user.dateOfBirth ? (() => {
-          const date = new Date(user.dateOfBirth!.split('/').reverse().join('-')); // Convert dd/mm/yy to yy-mm-dd
-          return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-        })() : null;
+        // Enhanced share text template
+        let shareText = `🚀 Farcaster ID Check! check my digital identity card 🪪✨\n\n`;
+        shareText += `📊 Stats: Neynar Score ${score} | FID #${user.fid}\n`;
+        shareText += `👥 ${followers} followers | ${following} following\n`;
+        shareText += `🏷️ @${user.username}`;
 
-        // Simple share text
-        let shareText = `Check out my Farcaster ID Card! 🪪\n\n`;
-        shareText += `Stats: Neynar Score ${score} | FID #${user.fid}\n`;
-        shareText += `Followers: ${followers} | Following: ${following}\n`;
-        shareText += `Username: @${user.username}`;
+        // Add badges based on follower count and score
+        const badges = [];
+        if (followers >= 1000) badges.push('🌟 Influencer');
+        else if (followers >= 100) badges.push('⭐ Rising Star');
+        else if (followers >= 10) badges.push('✨ Active Member');
 
-        // Add account creation date if available
-        if (accountDate) {
-          shareText += ` | Joined ${accountDate}`;
+        if (parseFloat(score) >= 85) badges.push('🏆 Top Scorer');
+        else if (parseFloat(score) >= 70) badges.push('🎯 High Achiever');
+
+        if (badges.length > 0) {
+          shareText += `\n🎖️ ${badges.join(' | ')}`;
         }
 
         // Add location if available
@@ -416,7 +411,13 @@ const App: React.FC = () => {
           shareText += ` | 📍 ${user.location}`;
         }
 
-        shareText += `\n\n#Farcaster #Web3`;
+        // Add bio if available (truncated)
+        if (user.bio) {
+          const truncatedBio = user.bio.length > 100 ? user.bio.substring(0, 97) + '...' : user.bio;
+          shareText += `\n\n"${truncatedBio}"`;
+        }
+
+        shareText += `\n\nCheck out your own Farcaster ID card! 🪄 #Farcaster #Web3 #Identity`;
 
         return shareText;
       })() : "Check out this Farcaster ID Card generator! 🪪";      console.log('Composing cast with:', { text, embeds });

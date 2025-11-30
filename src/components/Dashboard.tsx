@@ -36,6 +36,12 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
   const hasRealActivity = recentCasts && recentCasts.length > 0;
   const isLoadingCasts = recentCasts === undefined; // undefined means still loading
   const [qrCodeUrl, setQrCodeUrl] = useState<string>('');
+  const [isCardClicked, setIsCardClicked] = useState(false);
+  const [hoveredField, setHoveredField] = useState<string | null>(null);
+  const [hoveredStat, setHoveredStat] = useState<string | null>(null);
+  const [clickedStat, setClickedStat] = useState<string | null>(null);
+  const [isHeaderHovered, setIsHeaderHovered] = useState(false);
+  const [floatingElements, setFloatingElements] = useState<Array<{id: number, x: number, y: number, emoji: string}>>([]);
 
   useEffect(() => {
     if (user.username) {
@@ -45,11 +51,87 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
     }
   }, [user.username]);
 
+  const handleCardClick = () => {
+    setIsCardClicked(true);
+    setTimeout(() => setIsCardClicked(false), 300);
+  };
+
+  const handleFieldHover = (fieldName: string) => {
+    setHoveredField(fieldName);
+  };
+
+  const handleFieldLeave = () => {
+    setHoveredField(null);
+  };
+
+  const handleStatHover = (statName: string) => {
+    setHoveredStat(statName);
+  };
+
+  const handleStatLeave = () => {
+    setHoveredStat(null);
+  };
+
+  const handleStatClick = (statName: string) => {
+    setClickedStat(statName);
+    setTimeout(() => setClickedStat(null), 200);
+
+    // Add floating emoji effect
+    const emojis = ['✨', '⭐', '🌟', '💫', '🎉'];
+    const newElement = {
+      id: Date.now(),
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      emoji: emojis[Math.floor(Math.random() * emojis.length)]
+    };
+    setFloatingElements(prev => [...prev, newElement]);
+    setTimeout(() => {
+      setFloatingElements(prev => prev.filter(el => el.id !== newElement.id));
+    }, 2000);
+  };
+
+  const handleHeaderHover = () => {
+    setIsHeaderHovered(true);
+  };
+
+  const handleHeaderLeave = () => {
+    setIsHeaderHovered(false);
+  };
+
   return (
     <div ref={ref} className="fc-app-root">
+      {/* Background decorative elements */}
+      <div className="fc-bg-decoration fc-bg-decoration-1">🌟</div>
+      <div className="fc-bg-decoration fc-bg-decoration-2">✨</div>
+      <div className="fc-bg-decoration fc-bg-decoration-3">💫</div>
+      <div className="fc-bg-decoration fc-bg-decoration-4">⭐</div>
+
+      {/* Floating elements from stat clicks */}
+      {floatingElements.map(element => (
+        <div
+          key={element.id}
+          className="fc-floating-element"
+          style={{
+            left: `${element.x}%`,
+            top: `${element.y}%`,
+          }}
+        >
+          {element.emoji}
+        </div>
+      ))}
+
       <div className="fc-app-shell">
         {/* HEADER */}
-        <header className="fc-header">
+        <header
+          className={`fc-header ${isHeaderHovered ? 'fc-header-hovered' : ''}`}
+          onMouseEnter={handleHeaderHover}
+          onMouseLeave={handleHeaderLeave}
+        >
+          {/* Floating decorative elements */}
+          <div className="fc-header-decoration fc-header-decoration-1">✨</div>
+          <div className="fc-header-decoration fc-header-decoration-2">🌟</div>
+          <div className="fc-header-decoration fc-header-decoration-3">💫</div>
+
           <div className="fc-header-left">
             <div className="fc-avatar-wrap">
               {user.avatarUrl ? (
@@ -65,6 +147,8 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                 </div>
               )}
               <span className="fc-status-dot" />
+              {/* Avatar glow effect */}
+              <div className="fc-avatar-glow"></div>
             </div>
             <div>
               <div className="fc-header-name">{user.displayName}</div>
@@ -109,45 +193,82 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
 
         {/* STATS */}
         <section className="fc-stats-row">
-          <div className="fc-stat-card">
+          <div
+            className={`fc-stat-card ${hoveredStat === 'followers' ? 'fc-stat-hovered' : ''} ${clickedStat === 'followers' ? 'fc-stat-clicked' : ''}`}
+            onMouseEnter={() => handleStatHover('followers')}
+            onMouseLeave={handleStatLeave}
+            onClick={() => handleStatClick('followers')}
+          >
             <span className="fc-stat-label">Followers</span>
             <span className="fc-stat-value">
               {user.followersCount ?? "—"}
             </span>
+            <div className="fc-stat-decoration">👥</div>
           </div>
-          <div className="fc-stat-card">
+          <div
+            className={`fc-stat-card ${hoveredStat === 'following' ? 'fc-stat-hovered' : ''} ${clickedStat === 'following' ? 'fc-stat-clicked' : ''}`}
+            onMouseEnter={() => handleStatHover('following')}
+            onMouseLeave={handleStatLeave}
+            onClick={() => handleStatClick('following')}
+          >
             <span className="fc-stat-label">Following</span>
             <span className="fc-stat-value">
               {user.followingCount ?? "—"}
             </span>
+            <div className="fc-stat-decoration">👤</div>
           </div>
-          <div className="fc-stat-card">
+          <div
+            className={`fc-stat-card ${hoveredStat === 'casts' ? 'fc-stat-hovered' : ''} ${clickedStat === 'casts' ? 'fc-stat-clicked' : ''}`}
+            onMouseEnter={() => handleStatHover('casts')}
+            onMouseLeave={handleStatLeave}
+            onClick={() => handleStatClick('casts')}
+          >
             <span className="fc-stat-label">Casts</span>
             <span className="fc-stat-value">{user.castsCount ?? "—"}</span>
+            <div className="fc-stat-decoration">💬</div>
           </div>
-          <div className="fc-stat-card">
+          <div
+            className={`fc-stat-card ${hoveredStat === 'reactions' ? 'fc-stat-hovered' : ''} ${clickedStat === 'reactions' ? 'fc-stat-clicked' : ''}`}
+            onMouseEnter={() => handleStatHover('reactions')}
+            onMouseLeave={handleStatLeave}
+            onClick={() => handleStatClick('reactions')}
+          >
             <span className="fc-stat-label">Reactions</span>
             <span className="fc-stat-value">
               {user.reactionsCount ?? "—"}
             </span>
+            <div className="fc-stat-decoration">❤️</div>
           </div>
         </section>
 
         {/* FARCASTER ID CARD */}
         <section className="fc-section">
-          <div className="fc-section-header">
+          <div className="fc-section-header fc-section-interactive">
+            <div className="fc-section-header-decoration">🪪</div>
             <div>
               <div className="fc-section-title">Farcaster Identity Card</div>
               <div className="fc-section-subtitle">
                 Your personalized Farcaster identity card.
               </div>
             </div>
+            <div className="fc-section-sparkle">✨</div>
           </div>
 
           <div className="fc-idcard-wrap">
-            <div className="fc-idcard">
+            <div
+              className={`fc-idcard ${isCardClicked ? 'fc-card-clicked' : ''}`}
+              onClick={handleCardClick}
+            >
               {/* Enhanced Border Glow */}
               <div className="fc-idcard-glow"></div>
+
+              {/* Interactive Ornaments */}
+              <div className="fc-idcard-interactive-ornament"></div>
+              <div className="fc-idcard-interactive-ornament"></div>
+              <div className="fc-idcard-interactive-ornament"></div>
+              <div className="fc-idcard-interactive-ornament"></div>
+              <div className="fc-idcard-interactive-ornament"></div>
+              <div className="fc-idcard-interactive-ornament"></div>
 
               {/* Corner Ornaments */}
               <div className="fc-idcard-corner-tl"></div>
@@ -251,9 +372,16 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                   </div>
 
                   <div className="fc-idcard-field">
-                    <span className="fc-idcard-label">Date of Birth</span>
+                    <span className="fc-idcard-label">Followers</span>
                     <span className="fc-idcard-value">
-                      {user.dateOfBirth || "—"}
+                      {user.followersCount ?? "—"}
+                    </span>
+                  </div>
+
+                  <div className="fc-idcard-field">
+                    <span className="fc-idcard-label">Following</span>
+                    <span className="fc-idcard-value">
+                      {user.followingCount ?? "—"}
                     </span>
                   </div>
                 </div>
@@ -265,6 +393,12 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                   <span className="fc-idcard-qr-caption">
                     Scan on Farcaster
                   </span>
+                  <div className="fc-idcard-stamp">
+                    <div className="fc-stamp-content">
+                      <div className="fc-stamp-text">VERIFIED</div>
+                      <div className="fc-stamp-icon">✓</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -273,13 +407,15 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
 
         {/* RECENT ACTIVITY */}
         <section className="fc-section fc-section-last">
-          <div className="fc-section-header">
+          <div className="fc-section-header fc-section-interactive">
+            <div className="fc-section-header-decoration">📊</div>
             <div>
               <div className="fc-section-title">Recent Activity</div>
               <div className="fc-section-subtitle">
                 Latest casts from your Farcaster account with real likes & recasts.
               </div>
             </div>
+            <div className="fc-section-sparkle">🚀</div>
             {onRefreshData && (
               <button
                 className="fc-refresh-btn"
@@ -351,6 +487,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
         {/* ACTION BUTTONS */}
         <section className="fc-section fc-section-last">
           <div className="fc-actions">
+            <div className="fc-actions-decoration fc-actions-decoration-left">🎯</div>
             <button
               className="fc-btn fc-btn-secondary"
               type="button"
@@ -369,6 +506,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
               <span className="fc-btn-icon">⬇️</span>
               <span>Download Card</span>
             </button>
+            <div className="fc-actions-decoration fc-actions-decoration-right">💫</div>
           </div>
         </section>
       </div>

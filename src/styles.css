@@ -310,18 +310,410 @@ body {
   animation-duration: 4s;
 }
 
-/* Corner Ornaments */
-.fc-idcard-corner-tl,
-.fc-idcard-corner-tr,
-.fc-idcard-corner-bl,
-.fc-idcard-corner-br {
+/* Enhanced Interactive Ornaments */
+.fc-idcard-interactive-ornament {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(99, 102, 241, 0.6);
   pointer-events: none;
-  z-index: 1;
+  z-index: 3;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fc-idcard-interactive-ornament:nth-child(1) {
+  top: 15px;
+  left: 15px;
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(45deg, #6366f1, #a855f7);
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.6);
+  animation: ornamentPulse 3s ease-in-out infinite;
+}
+
+.fc-idcard-interactive-ornament:nth-child(2) {
+  top: 15px;
+  right: 40px;
+  width: 12px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #38bdf8, transparent);
+  border-radius: 2px;
+  animation: ornamentShine 4s ease-in-out infinite;
+}
+
+.fc-idcard-interactive-ornament:nth-child(3) {
+  bottom: 15px;
+  left: 15px;
+  width: 6px;
+  height: 6px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  animation: ornamentRotate 5s linear infinite;
+}
+
+.fc-idcard-interactive-ornament:nth-child(4) {
+  bottom: 15px;
+  right: 15px;
+  width: 10px;
+  height: 10px;
+  background: conic-gradient(from 0deg, #fbbf24, #f59e0b, #fbbf24);
+  border-radius: 50%;
+  animation: ornamentGlow 2.5s ease-in-out infinite alternate;
+}
+
+.fc-idcard-interactive-ornament:nth-child(5) {
+  top: 50%;
+  left: -5px;
+  width: 4px;
+  height: 20px;
+  background: linear-gradient(180deg, transparent, rgba(168, 85, 247, 0.8), transparent);
+  border-radius: 2px;
+  animation: ornamentFlow 6s ease-in-out infinite;
+}
+
+.fc-idcard-interactive-ornament:nth-child(6) {
+  top: 50%;
+  right: -5px;
+  width: 4px;
+  height: 20px;
+  background: linear-gradient(180deg, transparent, rgba(56, 189, 248, 0.8), transparent);
+  border-radius: 2px;
+  animation: ornamentFlow 6s ease-in-out infinite reverse;
+}
+
+@keyframes ornamentPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+}
+
+@keyframes ornamentShine {
+  0%, 100% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes ornamentRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ornamentGlow {
+  0% {
+    box-shadow: 0 0 5px rgba(251, 191, 36, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.8), 0 0 30px rgba(251, 191, 36, 0.4);
+  }
+}
+
+@keyframes ornamentFlow {
+  0%, 100% {
+    transform: translateY(-10px);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(10px);
+    opacity: 0.8;
+  }
+}
+
+/* Enhanced Hover Interactions */
+.fc-idcard {
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fc-idcard:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow:
+    0 25px 60px rgba(99, 102, 241, 0.4),
+    0 0 0 1px rgba(99, 102, 241, 0.2);
+}
+
+.fc-idcard:active {
+  transform: translateY(-1px) scale(1.01);
+  transition: all 0.1s ease;
+}
+
+/* Interactive Field Hover Effects */
+.fc-idcard-field {
   transition: all 0.3s ease;
+  padding: 2px;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.fc-idcard-field::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.fc-idcard-field:hover::before {
+  left: 100%;
+}
+
+.fc-idcard-field:hover {
+  transform: translateX(2px);
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.fc-idcard-field:hover .fc-idcard-label {
+  color: #c7d2fe;
+  transform: scale(1.05);
+}
+
+.fc-idcard-field:hover .fc-idcard-value {
+  color: #e5e7eb;
+  text-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+}
+
+/* Enhanced Photo Interactions */
+.fc-idcard-photo-frame {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.fc-idcard-photo-frame::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(45deg,
+    rgba(99, 102, 241, 0.3),
+    rgba(168, 85, 247, 0.3),
+    rgba(56, 189, 248, 0.3),
+    rgba(34, 197, 94, 0.3)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.fc-idcard-photo-frame:hover::after {
+  opacity: 1;
+  animation: photoGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes photoGlow {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* QR Code Interactive Effects */
+.fc-idcard-qr {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.fc-idcard-qr::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg,
+    rgba(99, 102, 241, 0.1),
+    rgba(168, 85, 247, 0.1),
+    rgba(56, 189, 248, 0.1)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.fc-idcard-qr:hover::before {
+  opacity: 1;
+}
+
+.fc-idcard-qr:hover {
+  transform: scale(1.05) rotate(2deg);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+}
+
+.fc-idcard-qr:hover .fc-qr-img {
+  filter: brightness(1.1) contrast(1.1);
+}
+
+/* Enhanced Particle Effects */
+.fc-particle {
+  transition: all 0.3s ease;
+}
+
+.fc-idcard:hover .fc-particle {
+  animation-duration: 2s;
+  opacity: 1;
+  transform: scale(1.5);
+}
+
+/* Logo Interactive Effects */
+.fc-idcard-logo {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.fc-idcard-logo::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  background: linear-gradient(45deg,
+    rgba(99, 102, 241, 0.5),
+    rgba(168, 85, 247, 0.5),
+    rgba(56, 189, 248, 0.5)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.fc-idcard-logo:hover::before {
+  opacity: 1;
+  animation: logoGlow 1.5s ease-in-out infinite alternate;
+}
+
+.fc-idcard-logo:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+}
+
+@keyframes logoGlow {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Score Badge Enhanced Interactions */
+.fc-score-badge {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.fc-score-badge::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.3), transparent);
+  transition: left 0.6s ease;
+}
+
+.fc-score-badge:hover::before {
+  left: 100%;
+}
+
+.fc-score-badge:hover {
+  transform: scale(1.05) translateY(-1px);
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+}
+
+/* Chip Enhanced Animation */
+.fc-idcard-chip {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.fc-idcard-chip::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg,
+    rgba(99, 102, 241, 0.2),
+    rgba(168, 85, 247, 0.2)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.fc-idcard-chip:hover::before {
+  opacity: 1;
+}
+
+.fc-idcard-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
+}
+
+/* Enhanced Corner Ornaments */
+.fc-idcard-corner-tl::after,
+.fc-idcard-corner-tr::after,
+.fc-idcard-corner-bl::after,
+.fc-idcard-corner-br::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.8);
+  animation: cornerSparkle 2s ease-in-out infinite;
+}
+
+.fc-idcard-corner-tl::after {
+  top: -6px;
+  left: -6px;
+}
+
+.fc-idcard-corner-tr::after {
+  top: -6px;
+  right: -6px;
+}
+
+.fc-idcard-corner-bl::after {
+  bottom: -6px;
+  left: -6px;
+}
+
+.fc-idcard-corner-br::after {
+  bottom: -6px;
+  right: -6px;
+}
+
+@keyframes cornerSparkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+.fc-card-clicked {
+  transform: scale(1.05) rotate(2deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.fc-idcard:active {
+  animation: cardClick 0.2s ease;
 }
 
 .fc-idcard-corner-tl {
@@ -646,8 +1038,8 @@ body {
 }
 
 .fc-idcard-logo {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -816,8 +1208,8 @@ body {
 }
 
 .fc-score-logo {
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
   border-radius: 4px;
   object-fit: contain;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
@@ -1035,5 +1427,387 @@ body {
     border-radius: 0;
     max-width: 100%;
     height: 100vh;
+  }
+}
+
+/* Enhanced Interactive Dashboard Elements */
+
+/* Background Decorations */
+.fc-bg-decoration {
+  position: fixed;
+  font-size: 24px;
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 0;
+  animation: bgFloat 8s ease-in-out infinite;
+}
+
+.fc-bg-decoration-1 {
+  top: 10%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.fc-bg-decoration-2 {
+  top: 20%;
+  right: 15%;
+  animation-delay: -2s;
+}
+
+.fc-bg-decoration-3 {
+  bottom: 25%;
+  left: 20%;
+  animation-delay: -4s;
+}
+
+.fc-bg-decoration-4 {
+  bottom: 15%;
+  right: 10%;
+  animation-delay: -6s;
+}
+
+@keyframes bgFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+  }
+  33% {
+    transform: translateY(-10px) rotate(5deg) scale(1.1);
+  }
+  66% {
+    transform: translateY(5px) rotate(-3deg) scale(0.9);
+  }
+}
+
+/* Header Interactive Elements */
+.fc-header-hovered {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2);
+}
+
+.fc-header-decoration {
+  position: absolute;
+  font-size: 16px;
+  opacity: 0.7;
+  animation: headerDecorationFloat 3s ease-in-out infinite;
+}
+
+.fc-header-decoration-1 {
+  top: -5px;
+  left: -5px;
+}
+
+.fc-header-decoration-2 {
+  top: -3px;
+  right: 20px;
+  animation-delay: -1s;
+}
+
+.fc-header-decoration-3 {
+  bottom: -5px;
+  right: -5px;
+  animation-delay: -2s;
+}
+
+@keyframes headerDecorationFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-3px) scale(1.2);
+    opacity: 1;
+  }
+}
+
+.fc-avatar-glow {
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  background: linear-gradient(45deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.3), rgba(56, 189, 248, 0.3));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.fc-avatar-wrap:hover .fc-avatar-glow {
+  opacity: 1;
+  animation: avatarGlowPulse 2s ease-in-out infinite;
+}
+
+@keyframes avatarGlowPulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Interactive Stats Cards */
+.fc-stat-hovered {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
+  border-color: rgba(99, 102, 241, 0.8);
+}
+
+.fc-stat-clicked {
+  animation: statClickBounce 0.3s ease;
+}
+
+@keyframes statClickBounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+
+.fc-stat-decoration {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 12px;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+}
+
+.fc-stat-card:hover .fc-stat-decoration {
+  opacity: 1;
+  transform: scale(1.2) rotate(10deg);
+  animation: statDecorationDance 1s ease-in-out infinite;
+}
+
+@keyframes statDecorationDance {
+  0%, 100% {
+    transform: scale(1.2) rotate(10deg);
+  }
+  25% {
+    transform: scale(1.3) rotate(0deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(20deg);
+  }
+}
+
+/* Floating Elements */
+.fc-floating-element {
+  position: fixed;
+  font-size: 24px;
+  pointer-events: none;
+  z-index: 1000;
+  animation: floatingElement 2s ease-out forwards;
+}
+
+@keyframes floatingElement {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.5) rotate(180deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(0) rotate(360deg) translateY(-100px);
+    opacity: 0;
+  }
+}
+
+/* Interactive Section Headers */
+.fc-section-interactive {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.fc-section-interactive:hover {
+  background: rgba(99, 102, 241, 0.05);
+  transform: translateX(2px);
+}
+
+.fc-section-header-decoration {
+  font-size: 18px;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.fc-section-interactive:hover .fc-section-header-decoration {
+  transform: scale(1.2) rotate(5deg);
+  opacity: 1;
+}
+
+.fc-section-sparkle {
+  font-size: 14px;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+  margin-left: auto;
+}
+
+.fc-section-interactive:hover .fc-section-sparkle {
+  opacity: 1;
+  animation: sparkleTwinkle 1s ease-in-out infinite;
+}
+
+@keyframes sparkleTwinkle {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.7;
+  }
+}
+
+/* Enhanced Action Buttons */
+.fc-actions-decoration {
+  font-size: 16px;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.fc-actions-decoration-left {
+  left: -25px;
+}
+
+.fc-actions-decoration-right {
+  right: -25px;
+}
+
+.fc-actions:hover .fc-actions-decoration {
+  opacity: 1;
+  animation: actionDecorationBounce 2s ease-in-out infinite;
+}
+
+@keyframes actionDecorationBounce {
+  0%, 100% {
+    transform: translateY(-50%) scale(1);
+  }
+  50% {
+    transform: translateY(-50%) scale(1.2);
+  }
+}
+
+/* Enhanced Button Hover Effects */
+.fc-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.fc-btn:active {
+  transform: translateY(0) scale(0.98);
+  transition: all 0.1s ease;
+}
+
+/* Pulse Animation for Active Elements */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.fc-status-dot {
+  animation: pulse 2s infinite;
+}
+
+/* Gradient Text Effects */
+.fc-section-title {
+  background: linear-gradient(135deg, #e5e7eb, #c7d2fe, #e5e7eb);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Stamp Styles */
+.fc-idcard-stamp {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.fc-stamp-content {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+  border: 2px solid rgba(251, 191, 36, 0.8);
+  position: relative;
+  animation: stampPulse 3s ease-in-out infinite;
+}
+
+.fc-stamp-content::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(45deg, transparent, rgba(251, 191, 36, 0.3), transparent);
+  animation: stampRotate 4s linear infinite;
+}
+
+.fc-stamp-text {
+  font-size: 7px;
+  font-weight: 700;
+  color: #1f2937;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1;
+  text-align: center;
+}
+
+.fc-stamp-icon {
+  font-size: 12px;
+  color: #1f2937;
+  margin-top: 1px;
+  font-weight: bold;
+}
+
+@keyframes stampPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(251, 191, 36, 0.6);
+  }
+}
+
+@keyframes stampRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
