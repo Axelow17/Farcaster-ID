@@ -400,49 +400,15 @@ const App: React.FC = () => {
           return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
         })() : null;
 
-        // Dynamic greeting based on time
-        const hour = new Date().getHours();
-        const greeting = hour < 12 ? '🌅 Good morning' : hour < 18 ? '🌞 Good afternoon' : '🌙 Good evening';
-
-        // Achievement badges based on stats
-        const badges = [];
-        if (followers >= 1000) badges.push('🌟 Influencer');
-        else if (followers >= 100) badges.push('⭐ Rising Star');
-        else if (followers >= 10) badges.push('✨ Active Member');
-
-        if (parseFloat(score) >= 85) badges.push('🏆 Top Scorer');
-        else if (parseFloat(score) >= 70) badges.push('🎯 High Achiever');
-
-        // Fun engagement hooks
-        const hooks = [
-          'Who else is checking their digital identity today?',
-          'The future of social identity is here! 🚀',
-          'Web3 identity made beautiful ✨',
-          'Join the decentralized identity revolution!',
-          'Your Farcaster story starts here 📖'
-        ];
-        const randomHook = hooks[Math.floor(Math.random() * hooks.length)];
-
-        // Create engaging share text with personality
-        let shareText = `${greeting}, Farcaster fam! 🫡\n\n`;
-        shareText += `🎭 Just minted my exclusive Farcaster ID Card!\n\n`;
-
-        // Stats with emojis and formatting
-        shareText += `📊 **Identity Stats:**\n`;
-        shareText += `🎯 Neynar Score: ${score} | 🆔 FID: #${user.fid}\n`;
-        shareText += `👥 ${followers.toLocaleString()} followers | 🔄 ${following.toLocaleString()} following\n`;
-
-        // Badges section
-        if (badges.length > 0) {
-          shareText += `🏅 **Achievements:** ${badges.join(' | ')}\n`;
-        }
-
-        // Profile info
-        shareText += `\n👤 **Profile:** @${user.username}`;
+        // Simple share text
+        let shareText = `Check out my Farcaster ID Card! 🪪\n\n`;
+        shareText += `Stats: Neynar Score ${score} | FID #${user.fid}\n`;
+        shareText += `Followers: ${followers} | Following: ${following}\n`;
+        shareText += `Username: @${user.username}`;
 
         // Add account creation date if available
         if (accountDate) {
-          shareText += ` | 📅 Joined ${accountDate}`;
+          shareText += ` | Joined ${accountDate}`;
         }
 
         // Add location if available
@@ -450,21 +416,10 @@ const App: React.FC = () => {
           shareText += ` | 📍 ${user.location}`;
         }
 
-        // Add bio with personality
-        if (user.bio && user.bio.length > 0) {
-          const bioPreview = user.bio.length > 60 ? user.bio.substring(0, 57) + '...' : user.bio;
-          shareText += `\n\n💭 "${bioPreview}"`;
-        }
-
-        // Call to action with random hook
-        shareText += `\n\n${randomHook}\n\n`;
-        shareText += `🔗 Get your own Farcaster ID Card now!\n`;
-        shareText += `#Farcaster #Web3 #Identity #DigitalCard #NFT #Blockchain`;
+        shareText += `\n\n#Farcaster #Web3`;
 
         return shareText;
-      })() : "🎭 Just discovered this amazing Farcaster ID Card generator! Check out your digital identity today! 🪪✨";
-
-      console.log('Composing cast with:', { text, embeds });
+      })() : "Check out this Farcaster ID Card generator! 🪪";      console.log('Composing cast with:', { text, embeds });
 
       // Compose the cast
       await sdk.actions.composeCast({
