@@ -42,16 +42,6 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
   const [clickedStat, setClickedStat] = useState<string | null>(null);
   const [isHeaderHovered, setIsHeaderHovered] = useState(false);
   const [floatingElements, setFloatingElements] = useState<Array<{id: number, x: number, y: number, emoji: string}>>([]);
-  const [cardBackground, setCardBackground] = useState<string>('linear-gradient(135deg, #667eea 0%, #764ba2 100%)');
-
-  const backgroundOptions = [
-    'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', // Purple gradient
-    'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', // Pink gradient
-    'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', // Blue gradient
-    'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', // Green gradient
-    'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', // Orange gradient
-    '#020617' // Dark background
-  ];
 
   useEffect(() => {
     if (user.username) {
@@ -108,41 +98,8 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
     setIsHeaderHovered(false);
   };
 
-  const changeCardBackground = () => {
-    const currentIndex = backgroundOptions.indexOf(cardBackground);
-    const nextIndex = (currentIndex + 1) % backgroundOptions.length;
-    setCardBackground(backgroundOptions[nextIndex]);
-  };
-
-  // Get theme colors based on current background
-  const getThemeColors = (bg: string) => {
-    if (bg.includes('#667eea')) return { primary: '#667eea', secondary: '#764ba2', accent: '#9b7ce8' };
-    if (bg.includes('#f093fb')) return { primary: '#f093fb', secondary: '#f5576c', accent: '#ff7eb3' };
-    if (bg.includes('#4facfe')) return { primary: '#4facfe', secondary: '#00f2fe', accent: '#6fd4ff' };
-    if (bg.includes('#43e97b')) return { primary: '#43e97b', secondary: '#38f9d7', accent: '#6ff7b3' };
-    if (bg.includes('#fa709a')) return { primary: '#fa709a', secondary: '#fee140', accent: '#ffb366' };
-    return { primary: '#6366f1', secondary: '#8b5cf6', accent: '#a78bfa' }; // Default purple
-  };
-
-  const themeColors = getThemeColors(cardBackground);
-
   return (
-    <div ref={ref} className="fc-app-root" style={{ background: `radial-gradient(circle at 20% 50%, ${themeColors.primary}15 0%, transparent 50%), radial-gradient(circle at 80% 20%, ${themeColors.secondary}10 0%, transparent 50%), radial-gradient(circle at 40% 80%, ${themeColors.accent}08 0%, transparent 50%)` }}>
-      {/* Enhanced Background decorative elements */}
-      <div className="fc-bg-decoration fc-bg-decoration-1" style={{ color: themeColors.primary, fontSize: '2rem', animation: 'float 6s ease-in-out infinite' }}>🌟</div>
-      <div className="fc-bg-decoration fc-bg-decoration-2" style={{ color: themeColors.secondary, fontSize: '1.5rem', animation: 'float 8s ease-in-out infinite reverse' }}>✨</div>
-      <div className="fc-bg-decoration fc-bg-decoration-3" style={{ color: themeColors.accent, fontSize: '2.5rem', animation: 'float 7s ease-in-out infinite' }}>💫</div>
-      <div className="fc-bg-decoration fc-bg-decoration-4" style={{ color: themeColors.primary, fontSize: '1.8rem', animation: 'float 9s ease-in-out infinite reverse' }}>⭐</div>
-      <div className="fc-bg-decoration fc-bg-decoration-5" style={{ color: themeColors.secondary, fontSize: '2.2rem', animation: 'float 5s ease-in-out infinite' }}>🎨</div>
-      <div className="fc-bg-decoration fc-bg-decoration-6" style={{ color: themeColors.accent, fontSize: '1.6rem', animation: 'float 10s ease-in-out infinite reverse' }}>🌈</div>
-      <div className="fc-bg-decoration fc-bg-decoration-7" style={{ color: themeColors.primary, fontSize: '2.8rem', animation: 'float 6.5s ease-in-out infinite' }}>✨</div>
-      <div className="fc-bg-decoration fc-bg-decoration-8" style={{ color: themeColors.secondary, fontSize: '1.4rem', animation: 'float 8.5s ease-in-out infinite reverse' }}>💎</div>
-
-      {/* Animated background orbs */}
-      <div className="fc-bg-orb fc-bg-orb-1" style={{ background: `radial-gradient(circle, ${themeColors.primary}20, transparent)`, animation: 'orbFloat 12s ease-in-out infinite' }}></div>
-      <div className="fc-bg-orb fc-bg-orb-2" style={{ background: `radial-gradient(circle, ${themeColors.secondary}15, transparent)`, animation: 'orbFloat 15s ease-in-out infinite reverse' }}></div>
-      <div className="fc-bg-orb fc-bg-orb-3" style={{ background: `radial-gradient(circle, ${themeColors.accent}10, transparent)`, animation: 'orbFloat 18s ease-in-out infinite' }}></div>
-
+    <div ref={ref} className="fc-app-root">
       {/* Floating elements from stat clicks */}
       {floatingElements.map(element => (
         <div
@@ -151,7 +108,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
           style={{
             left: `${element.x}%`,
             top: `${element.y}%`,
-            color: themeColors.primary,
+            color: '#6366f1',
           }}
         >
           {element.emoji}
@@ -296,7 +253,6 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
             <div
               className={`fc-idcard ${isCardClicked ? 'fc-card-clicked' : ''}`}
               onClick={handleCardClick}
-              style={{ background: cardBackground }}
             >
               {/* Enhanced Border Glow */}
               <div className="fc-idcard-glow"></div>
@@ -387,6 +343,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                       #{user.fid ?? "—"}
                     </span>
                   </div>
+                </div>
 
                 <div className="fc-idcard-qr-col">
                   <div className="fc-idcard-qr">
@@ -492,15 +449,6 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
             >
               <span className="fc-btn-icon">{sharing ? "⏳" : "📣"}</span>
               <span>{sharing ? "Sharing..." : "Share ID to Farcaster"}</span>
-            </button>
-
-            <button
-              className="fc-btn fc-btn-ghost"
-              type="button"
-              onClick={changeCardBackground}
-            >
-              <span className="fc-btn-icon">🎨</span>
-              <span>Change Background</span>
             </button>
 
             <button
