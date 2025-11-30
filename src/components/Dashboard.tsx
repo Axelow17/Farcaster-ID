@@ -42,6 +42,16 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
   const [clickedStat, setClickedStat] = useState<string | null>(null);
   const [isHeaderHovered, setIsHeaderHovered] = useState(false);
   const [floatingElements, setFloatingElements] = useState<Array<{id: number, x: number, y: number, emoji: string}>>([]);
+  const [cardBackground, setCardBackground] = useState<string>('linear-gradient(135deg, #667eea 0%, #764ba2 100%)');
+
+  const backgroundOptions = [
+    'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', // Purple gradient
+    'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', // Pink gradient
+    'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', // Blue gradient
+    'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', // Green gradient
+    'linear-gradient(135deg, #fa709a 0%, #fee140 100%)', // Orange gradient
+    '#020617' // Dark background
+  ];
 
   useEffect(() => {
     if (user.username) {
@@ -96,6 +106,12 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
 
   const handleHeaderLeave = () => {
     setIsHeaderHovered(false);
+  };
+
+  const changeCardBackground = () => {
+    const currentIndex = backgroundOptions.indexOf(cardBackground);
+    const nextIndex = (currentIndex + 1) % backgroundOptions.length;
+    setCardBackground(backgroundOptions[nextIndex]);
   };
 
   return (
@@ -258,6 +274,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
             <div
               className={`fc-idcard ${isCardClicked ? 'fc-card-clicked' : ''}`}
               onClick={handleCardClick}
+              style={{ background: cardBackground }}
             >
               {/* Enhanced Border Glow */}
               <div className="fc-idcard-glow"></div>
@@ -475,6 +492,15 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
             >
               <span className="fc-btn-icon">{sharing ? "⏳" : "📣"}</span>
               <span>{sharing ? "Sharing..." : "Share ID to Farcaster"}</span>
+            </button>
+
+            <button
+              className="fc-btn fc-btn-ghost"
+              type="button"
+              onClick={changeCardBackground}
+            >
+              <span className="fc-btn-icon">🎨</span>
+              <span>Change Background</span>
             </button>
 
             <button
