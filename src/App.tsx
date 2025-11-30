@@ -141,6 +141,9 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [sharing, setSharing] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  const [devFid, setDevFid] = useState<string>('12345');
+  const [devUsername, setDevUsername] = useState<string>('testuser');
+  const [devMode, setDevMode] = useState<boolean>(false);
 
   const loadNeynarData = async (fid: number, showLoading = false) => {
     if (showLoading) {
@@ -261,47 +264,99 @@ const App: React.FC = () => {
     }
   };
 
+  const loadUserData = async (fid: number, username?: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const baseUser: DashboardUser = {
+        fid,
+        username: username ?? `user-${fid}`,
+        displayName: username ?? `FID ${fid}`,
+        avatarUrl: undefined
+      };
+      setUser(baseUser);
+      await loadNeynarData(fid);
+      setLoading(false);
+    } catch (e) {
+      console.error(e);
+      setError("Failed to load user data.");
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const init = async () => {
       try {
-        // For development: bypass miniapp check and use mock data
-        const inMiniApp = true; // await sdk.isInMiniApp();
-        if (!inMiniApp) {
-          setError(
-            "Open this mini app from inside a Farcaster/Base client to see your dashboard."
-          );
+        const inMiniApp = false; // await sdk.isInMiniApp();
+        if (inMiniApp) {
+          // Mock context for development
+          const ctx = {
+            user: {
+              fid: 12345,
+              username: "testuser",
+              displayName: "Test User",
+              pfpUrl: "https://example.com/avatar.png"
+            }
+          };
+          // const ctx = await sdk.context;
+          const u = ctx.user;
+
+          const baseUser: DashboardUser = {
+            fid: u.fid,
+            username: u.username ?? `user-${u.fid}`,
+            displayName: u.displayName ?? u.username ?? `FID ${u.fid}`,
+            avatarUrl: (u as any).pfpUrl
+          };
+
+          setUser(baseUser);
+          await loadNeynarData(u.fid);
+          // await sdk.actions.ready();
           setLoading(false);
-          return;
-        }
+        } else {
+          // Check URL params for auto-detect
+          const urlParams = new URLSearchParams(window.location.search);
+          const fidParam = urlParams.get('fid');
+          const usernameParam = urlParams.get('username');
 
-        // Mock context for development
-        const ctx = {
-          user: {
-            fid: 12345,
-            username: "testuser",
-            displayName: "Test User",
-            pfpUrl: "https://example.com/avatar.png"
+          if (fidParam) {
+            await loadUserData(parseInt(fidParam));
+          } else if (usernameParam) {
+            // Resolve username to FID
+            if (NEYNAR_API_KEY) {
+              try {
+                const res = await fetch(`https://api.neynar.com/v2/farcaster/user/search?q=${usernameParam}&limit=1`, {
+                  headers: { "x-api-key": NEYNAR_API_KEY, accept: "application/json" }
+                });
+                if (res.ok) {
+                  const data = await res.json();
+                  const user = data.result?.users?.[0];
+                  if (user) {
+                    await loadUserData(user.fid, user.username);
+                  } else {
+                    setDevMode(true);
+                    setLoading(false);
+                  }
+                } else {
+                  setDevMode(true);
+                  setLoading(false);
+                }
+              } catch (e) {
+                setDevMode(true);
+                setLoading(false);
+              }
+            } else {
+              setDevMode(true);
+              setLoading(false);
+            }
+          } else {
+            // For local development, show dev mode
+            setDevMode(true);
+            setLoading(false);
           }
-        };
-        // const ctx = await sdk.context;
-        const u = ctx.user;
-
-        const baseUser: DashboardUser = {
-          fid: u.fid,
-          username: u.username ?? `user-${u.fid}`,
-          displayName: u.displayName ?? u.username ?? `FID ${u.fid}`,
-          avatarUrl: (u as any).pfpUrl
-        };
-
-        setUser(baseUser);
-
-        await loadNeynarData(u.fid);
-
-        // await sdk.actions.ready();
-        setLoading(false);
+        }
       } catch (e) {
         console.error(e);
-        setError("Failed to load data from Farcaster Mini App context.");
+        setError("Failed to initialize.");
         setLoading(false);
       }
     };
@@ -519,12 +574,67 @@ const App: React.FC = () => {
     }
   };
 
-  if (loading) {
+  if (devMode) {
     return (
       <div className="fc-app-root">
         <div className="fc-app-shell">
           <div style={{ textAlign: "center", marginTop: 40, color: "#e5e7eb" }}>
-            Loading your Farcaster data…
+            <h2>Development Mode</h2>
+            <p>Enter a Farcaster FID or username to load data:</p>
+            <div style={{ margin: "20px 0" }}>
+              <input
+                type="text"
+                placeholder="FID (e.g., 12345)"
+                value={devFid}
+                onChange={(e) => setDevFid(e.target.value)}
+                style={{ marginRight: 10, padding: 8, borderRadius: 4, border: "1px solid #ccc" }}
+              />
+              <button
+                onClick={() => loadUserData(parseInt(devFid), undefined)}
+                style={{ padding: "8px 16px", borderRadius: 4, background: "#007bff", color: "white", border: "none", cursor: "pointer" }}
+              >
+                Load by FID
+              </button>
+            </div>
+            <div style={{ margin: "20px 0" }}>
+              <input
+                type="text"
+                placeholder="Username (e.g., testuser)"
+                value={devUsername}
+                onChange={(e) => setDevUsername(e.target.value)}
+                style={{ marginRight: 10, padding: 8, borderRadius: 4, border: "1px solid #ccc" }}
+              />
+              <button
+                onClick={async () => {
+                  // First, resolve username to FID using Neynar
+                  if (!NEYNAR_API_KEY) {
+                    alert("NEYNAR_API_KEY not set");
+                    return;
+                  }
+                  try {
+                    const res = await fetch(`https://api.neynar.com/v2/farcaster/user/search?q=${devUsername}&limit=1`, {
+                      headers: { "x-api-key": NEYNAR_API_KEY, accept: "application/json" }
+                    });
+                    if (res.ok) {
+                      const data = await res.json();
+                      const user = data.result?.users?.[0];
+                      if (user) {
+                        loadUserData(user.fid, user.username);
+                      } else {
+                        alert("User not found");
+                      }
+                    } else {
+                      alert("Failed to search user");
+                    }
+                  } catch (e) {
+                    alert("Error searching user");
+                  }
+                }}
+                style={{ padding: "8px 16px", borderRadius: 4, background: "#28a745", color: "white", border: "none", cursor: "pointer" }}
+              >
+                Load by Username
+              </button>
+            </div>
           </div>
         </div>
       </div>
