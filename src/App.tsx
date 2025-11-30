@@ -391,8 +391,6 @@ const App: React.FC = () => {
         const score = user.neynarScore?.toFixed(2) ?? 'N/A';
         const followers = user.followersCount ?? 0;
         const following = user.followingCount ?? 0;
-        const casts = user.castsCount ?? 0;
-        const reactions = user.reactionsCount ?? 0;
         
         // Format account creation date as "Month Year"
         const accountDate = user.dateOfBirth ? (() => {
@@ -404,7 +402,6 @@ const App: React.FC = () => {
         let shareText = `🚀 Farcaster ID Check! check my digital identity card 🪪✨\n\n`;
         shareText += `📊 Stats: Neynar Score ${score} | FID #${user.fid}\n`;
         shareText += `👥 ${followers} followers | ${following} following\n`;
-        shareText += `📝 ${casts} casts | ${reactions} reactions\n`;
         shareText += `🏷️ @${user.username}`;
         
         // Add account creation date if available
