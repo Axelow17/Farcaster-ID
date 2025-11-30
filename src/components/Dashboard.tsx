@@ -342,20 +342,6 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                     </span>
                   </div>
 
-                  <div className="fc-idcard-field fc-field-social">
-                    <span className="fc-idcard-label">👥 Followers</span>
-                    <span className="fc-idcard-value">
-                      {user.followersCount?.toLocaleString() ?? "—"}
-                    </span>
-                  </div>
-
-                  <div className="fc-idcard-field fc-field-social">
-                    <span className="fc-idcard-label">❤️ Following</span>
-                    <span className="fc-idcard-value">
-                      {user.followingCount?.toLocaleString() ?? "—"}
-                    </span>
-                  </div>
-
                   <div className="fc-idcard-field fc-field-technical">
                     <span className="fc-idcard-label">🆔 FID</span>
                     <span className="fc-idcard-value">
