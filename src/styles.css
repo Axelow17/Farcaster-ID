@@ -1059,11 +1059,25 @@ body {
   font-weight: 600;
   letter-spacing: 0.12em;
   color: #e5e7eb;
+  font-weight: bold;
+  text-shadow: 
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000,
+    0 0 3px rgba(0, 0, 0, 0.8);
 }
 
 .fc-idcard-subtitle {
   font-size: 12px;
   color: #9ca3af;
+  font-weight: bold;
+  text-shadow: 
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000,
+    0 0 2px rgba(0, 0, 0, 0.6);
 }
 
 .fc-status-indicator {
@@ -1193,9 +1207,15 @@ body {
   gap: 4px;
 }
 
-.fc-idcard-field {
-  display: flex;
-  flex-direction: column;
+.fc-idcard-value {
+  color: #e5e7eb;
+  font-weight: bold;
+  text-shadow: 
+    -0.5px -0.5px 0 #000,
+    0.5px -0.5px 0 #000,
+    -0.5px 0.5px 0 #000,
+    0.5px 0.5px 0 #000,
+    0 0 2px rgba(0, 0, 0, 0.7);
 }
 
 .fc-idcard-label {
@@ -1203,6 +1223,13 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #9ca3af;
+  font-weight: bold;
+  text-shadow: 
+    -0.5px -0.5px 0 #000,
+    0.5px -0.5px 0 #000,
+    -0.5px 0.5px 0 #000,
+    0.5px 0.5px 0 #000,
+    0 0 1px rgba(0, 0, 0, 0.5);
 }
 
 /* Enhanced Field Styles for Better Hierarchy */
@@ -1222,6 +1249,14 @@ body {
   font-weight: 600;
   color: #e5e7eb;
   text-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
+  font-weight: bold;
+  text-shadow: 
+    -0.5px -0.5px 0 #000,
+    0.5px -0.5px 0 #000,
+    -0.5px 0.5px 0 #000,
+    0.5px 0.5px 0 #000,
+    0 0 2px rgba(0, 0, 0, 0.7),
+    0 0 8px rgba(99, 102, 241, 0.3);
 }
 
 .fc-field-social {
@@ -1239,6 +1274,13 @@ body {
 .fc-field-social .fc-idcard-value {
   color: #4ade80;
   font-weight: 500;
+  font-weight: bold;
+  text-shadow: 
+    -0.5px -0.5px 0 #000,
+    0.5px -0.5px 0 #000,
+    -0.5px 0.5px 0 #000,
+    0.5px 0.5px 0 #000,
+    0 0 2px rgba(0, 0, 0, 0.7);
 }
 
 .fc-field-technical {
@@ -1256,6 +1298,13 @@ body {
 .fc-field-technical .fc-idcard-value {
   color: #a78bfa;
   font-weight: 500;
+  font-weight: bold;
+  text-shadow: 
+    -0.5px -0.5px 0 #000,
+    0.5px -0.5px 0 #000,
+    -0.5px 0.5px 0 #000,
+    0.5px 0.5px 0 #000,
+    0 0 2px rgba(0, 0, 0, 0.7);
 }
 
 .fc-score-badge {
@@ -1346,6 +1395,13 @@ body {
 .fc-idcard-qr-caption {
   font-size: 8px;
   color: #9ca3af;
+  font-weight: bold;
+  text-shadow: 
+    -0.5px -0.5px 0 #000,
+    0.5px -0.5px 0 #000,
+    -0.5px 0.5px 0 #000,
+    0.5px 0.5px 0 #000,
+    0 0 1px rgba(0, 0, 0, 0.5);
 }
 
 /* Card footer */
