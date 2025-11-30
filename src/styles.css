@@ -1,20 +1,23 @@
 :root {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "Segoe UI", sans-serif;
-  color-scheme: dark;
-  --fc-bg: #020617;
-  --fc-card-bg: rgba(15, 23, 42, 0.96);
-  --fc-card-border: rgba(148, 163, 184, 0.28);
-  --fc-accent: #6366f1;
-  --fc-accent-2: #22c55e;
-  --fc-text: #e5e7eb;
-  --fc-text-soft: #9ca3af;
-  --fc-radius-lg: 20px;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color-scheme: light;
+  --fc-bg: #f8fafc;
+  --fc-card-bg: #ffffff;
+  --fc-card-border: #d1d5db;
+  --fc-accent: #1e40af;
+  --fc-accent-2: #059669;
+  --fc-text: #1f2937;
+  --fc-text-soft: #6b7280;
+  --fc-radius-lg: 8px;
+  --fc-security-blue: #1e3a8a;
+  --fc-security-gray: #374151;
+  --fc-official-white: #ffffff;
 }
 
 body {
   margin: 0;
-  background: radial-gradient(circle at top, #020617 0, #020617 40%, #000 100%);
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 50%, #94a3b8 100%);
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
 
 .fc-app-root {
@@ -29,16 +32,15 @@ body {
 .fc-app-shell {
   width: 100%;
   max-width: 424px;
-  background: radial-gradient(circle at top, #020617, #020617 55%, #000 100%);
-  border-radius: 28px;
-  border: 1px solid rgba(148, 163, 184, 0.25);
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
+  border-radius: 12px;
+  border: 2px solid #d1d5db;
   padding: 14px 14px 18px;
   box-sizing: border-box;
-  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.9);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   gap: 10px;
-  animation: fadeIn 0.8s ease-in-out;
 }
 
 @keyframes fadeIn {
@@ -128,12 +130,14 @@ body {
 .fc-header-name {
   font-size: 16px;
   font-weight: 600;
-  color: #f9fafb;
+  color: var(--fc-text);
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
 
 .fc-header-username {
   font-size: 13px;
   color: var(--fc-text-soft);
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
 
 .fc-header-meta {
@@ -195,20 +199,21 @@ body {
 }
 
 .fc-stat-card {
-  background: radial-gradient(circle at top left, #1e293b, #020617);
-  border-radius: 14px;
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  padding: 6px 6px 7px;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+  padding: 8px 8px 9px;
   text-align: left;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .fc-stat-card:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
-  border-color: rgba(99, 102, 241, 0.6);
-  background: radial-gradient(circle at top left, #1e293b, #020617, rgba(99, 102, 241, 0.1));
+  box-shadow: 0 8px 20px rgba(30, 64, 175, 0.15);
+  border-color: var(--fc-accent);
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
 }
 
 .fc-stat-card:active {
@@ -220,7 +225,9 @@ body {
   font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #9ca3af;
+  color: var(--fc-text-soft);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-weight: 600;
 }
 
 .fc-stat-value {
@@ -228,7 +235,8 @@ body {
   margin-top: 2px;
   font-size: 14px;
   font-weight: 600;
-  color: #e5e7eb;
+  color: var(--fc-text);
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
 
 /* SECTIONS */
@@ -251,12 +259,14 @@ body {
 .fc-section-title {
   font-size: 13px;
   font-weight: 600;
-  color: #e5e7eb;
+  color: var(--fc-text);
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
 
 .fc-section-subtitle {
   font-size: 11px;
-  color: #9ca3af;
+  color: var(--fc-text-soft);
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
 
 .fc-tag {
@@ -273,17 +283,12 @@ body {
 
 /* ID CARD */
 .fc-idcard-wrap {
-  background: linear-gradient(
-    135deg,
-    rgba(56, 189, 248, 0.15),
-    rgba(99, 102, 241, 0.08),
-    rgba(168, 85, 247, 0.1),
-    rgba(15, 23, 42, 0.9)
-  );
-  border-radius: var(--fc-radius-lg);
-  padding: 2px;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
+  border-radius: 12px;
+  padding: 3px;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .fc-idcard-wrap::before {
@@ -293,17 +298,28 @@ body {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: conic-gradient(
-    from 0deg,
-    transparent,
-    rgba(99, 102, 241, 0.1),
-    rgba(168, 85, 247, 0.1),
-    rgba(56, 189, 248, 0.1),
-    rgba(34, 197, 94, 0.1),
-    transparent
-  );
-  animation: rotate 8s linear infinite;
+  background: 
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 3px,
+      rgba(30, 64, 175, 0.03) 3px,
+      rgba(30, 64, 175, 0.03) 6px
+    ),
+    radial-gradient(circle at 30% 70%, rgba(30, 64, 175, 0.04) 0%, transparent 50%),
+    radial-gradient(circle at 70% 30%, rgba(59, 130, 246, 0.04) 0%, transparent 50%);
+  animation: securityShift 20s ease-in-out infinite;
   pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes securityShift {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }
 
 .fc-idcard-wrap:hover::before {
@@ -898,11 +914,13 @@ body {
 }
 
 .fc-idcard {
-  border-radius: 16px;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  border-radius: 10px;
+  background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%);
   padding: 16px 16px 14px;
-  border: 1px solid rgba(148, 163, 184, 0.4);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.1);
+  border: 2px solid #d1d5db;
+  box-shadow: 
+    inset 0 1px 3px rgba(0, 0, 0, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.08);
   position: relative;
   overflow: hidden;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
@@ -916,12 +934,19 @@ body {
   right: 0;
   bottom: 0;
   background: 
-    radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(56, 189, 248, 0.03) 0%, transparent 50%),
-    linear-gradient(45deg, transparent 30%, rgba(99, 102, 241, 0.02) 50%, transparent 70%);
+    linear-gradient(45deg, transparent 40%, rgba(30, 64, 175, 0.02) 50%, transparent 60%),
+    radial-gradient(circle at 25% 25%, rgba(30, 64, 175, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 75% 75%, rgba(59, 130, 246, 0.03) 0%, transparent 40%),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 1px,
+      rgba(107, 114, 128, 0.01) 1px,
+      rgba(107, 114, 128, 0.01) 2px
+    );
   pointer-events: none;
-  animation: hologramShift 6s ease-in-out infinite;
+  animation: hologramShift 15s ease-in-out infinite;
+  z-index: 1;
 }
 
 @keyframes hologramShift {
@@ -1038,42 +1063,39 @@ body {
   gap: 12px;
   margin-bottom: 12px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(99, 102, 241, 0.15);
+  border-bottom: 2px solid #e5e7eb;
 }
 
 .fc-idcard-logo {
   width: 32px;
   height: 32px;
-  border-radius: 10px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(129, 140, 248, 0.7);
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.9);
-}
-
-.fc-idcard-logo-icon {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  border: 2px solid var(--fc-accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .fc-idcard-title {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: #f1f5f9;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  color: var(--fc-text);
+  text-shadow: none;
   line-height: 1.2;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  text-transform: uppercase;
 }
 
 .fc-idcard-subtitle {
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 500;
-  color: #94a3b8;
+  color: var(--fc-text-soft);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   margin-top: 2px;
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
 
 .fc-status-indicator {
@@ -1116,14 +1138,16 @@ body {
 .fc-idcard-photo-frame {
   width: 60px;
   height: 72px;
-  border-radius: 12px;
-  background: linear-gradient(145deg, #0f172a, #1e293b);
-  border: 2px solid rgba(148, 163, 184, 0.6);
-  padding: 4px;
+  border-radius: 6px;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border: 3px solid #374151;
+  padding: 3px;
   box-sizing: border-box;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 
+    inset 0 1px 3px rgba(0, 0, 0, 0.2),
+    0 2px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -1169,16 +1193,17 @@ body {
 .fc-idcard-photo-placeholder {
   width: 100%;
   height: 100%;
-  border-radius: 8px;
+  border-radius: 3px;
   object-fit: cover;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at 25% 25%, #3b82f6, #1d4ed8);
-  color: #f8fafc;
+  background: linear-gradient(145deg, #e5e7eb 0%, #d1d5db 100%);
+  color: var(--fc-text);
   font-weight: 700;
-  font-size: 20px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  font-size: 18px;
+  text-shadow: none;
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
 
 .fc-idcard-chip {
@@ -1209,31 +1234,34 @@ body {
 }
 
 .fc-idcard-value {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
-  color: #f8fafc;
+  color: var(--fc-text);
   line-height: 1.3;
   margin-top: 1px;
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
 
 .fc-idcard-label {
-  font-size: 9px;
+  font-size: 8px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #94a3b8;
+  color: var(--fc-text-soft);
   font-weight: 600;
   opacity: 0.9;
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
 
 /* Enhanced Field Styles for Better Hierarchy */
 .fc-field-primary {
-  margin-bottom: 8px;
-  padding: 6px 8px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(168, 85, 247, 0.04));
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  margin-bottom: 6px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #d1d5db;
   position: relative;
   overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .fc-field-primary::before {
@@ -1243,20 +1271,21 @@ body {
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, rgba(99, 102, 241, 0.6), rgba(168, 85, 247, 0.6));
+  background: var(--fc-accent);
 }
 
 .fc-field-primary .fc-idcard-label {
-  color: #c7d2fe;
+  color: var(--fc-security-blue);
   font-weight: 700;
-  font-size: 10px;
+  font-size: 8px;
 }
 
 .fc-value-primary {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  color: #f1f5f9;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  color: var(--fc-text);
+  text-shadow: none;
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
 
 .fc-field-social {
@@ -1365,16 +1394,18 @@ body {
 .fc-idcard-qr {
   width: 64px;
   height: 64px;
-  border-radius: 10px;
-  border: 1px solid rgba(148, 163, 184, 0.8);
-  padding: 5px;
+  border-radius: 6px;
+  border: 2px solid #374151;
+  padding: 4px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.6));
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: 
+    inset 0 1px 2px rgba(0, 0, 0, 0.1),
+    0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .fc-qr-row {
@@ -1398,12 +1429,13 @@ body {
 }
 
 .fc-idcard-qr-caption {
-  font-size: 8px;
-  color: #94a3b8;
+  font-size: 7px;
+  color: var(--fc-text-soft);
   font-weight: 600;
   text-align: center;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
 
 /* Card footer */
@@ -1484,21 +1516,34 @@ body {
 }
 
 .fc-btn-primary {
-  background: linear-gradient(135deg, #4f46e5, #22c55e);
-  color: #f9fafb;
-  box-shadow: 0 14px 30px rgba(22, 163, 74, 0.4);
+  background: linear-gradient(145deg, var(--fc-accent) 0%, var(--fc-security-blue) 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+  border: 2px solid var(--fc-accent);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .fc-btn-secondary {
-  background: rgba(15, 23, 42, 0.95);
-  border: 1px solid rgba(129, 140, 248, 0.8);
-  color: #e5e7eb;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border: 2px solid #d1d5db;
+  color: var(--fc-text);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .fc-btn-ghost {
   background: transparent;
-  border: 1px dashed rgba(148, 163, 184, 0.6);
-  color: #9ca3af;
+  border: 2px solid #d1d5db;
+  color: var(--fc-text-soft);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 /* ACTIVITY LIST */
@@ -1528,7 +1573,8 @@ body {
 
 .fc-activity-text {
   font-size: 12px;
-  color: #e5e7eb;
+  color: var(--fc-text);
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
 
 .fc-refresh-btn {
@@ -1927,18 +1973,20 @@ body {
 }
 
 .fc-stamp-content {
-  background: linear-gradient(135deg, #10b981, #059669, #047857);
+  background: linear-gradient(135deg, var(--fc-security-blue), #1e3a8a, #1e40af);
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-  border: 2px solid rgba(16, 185, 129, 0.8);
+  box-shadow: 
+    0 3px 10px rgba(30, 64, 175, 0.3),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  border: 2px solid var(--fc-security-blue);
   position: relative;
-  animation: stampPulse 3s ease-in-out infinite;
+  animation: stampPulse 4s ease-in-out infinite;
 }
 
 .fc-stamp-content::before {
@@ -1946,22 +1994,23 @@ body {
   position: absolute;
   inset: -2px;
   border-radius: inherit;
-  background: linear-gradient(45deg, transparent, rgba(16, 185, 129, 0.3), transparent);
-  animation: stampRotate 4s linear infinite;
+  background: linear-gradient(45deg, transparent, rgba(30, 64, 175, 0.3), transparent);
+  animation: stampRotate 6s linear infinite;
 }
 
 .fc-stamp-text {
-  font-size: 7px;
+  font-size: 6px;
   font-weight: 700;
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   line-height: 1;
   text-align: center;
+  font-family: 'Georgia', 'Times New Roman', serif;
 }
 
 .fc-stamp-icon {
-  font-size: 12px;
+  font-size: 10px;
   color: #ffffff;
   margin-top: 1px;
   font-weight: bold;

@@ -292,14 +292,14 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                 </div>
                 <div>
                   <div className="fc-idcard-title">
-                    FARCASTER IDENTITY CARD
+                    OFFICIAL FARCASTER ID
                   </div>
                   <div className="fc-idcard-subtitle">
-                    Network: Base · Protocol: Farcaster
+                    Federal Identity Card · Farcaster Protocol
                   </div>
                   <div className="fc-status-indicator">
                     <span className="fc-status-dot"></span>
-                    Active on Farcaster
+                    VERIFIED MEMBER
                   </div>
                 </div>
               </div>
@@ -324,28 +324,28 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
 
                 <div className="fc-idcard-info-col">
                   <div className="fc-idcard-field fc-field-primary">
-                    <span className="fc-idcard-label">👤 Name</span>
+                    <span className="fc-idcard-label">FULL NAME</span>
                     <span className="fc-idcard-value fc-value-primary">
                       {user.displayName || "—"}
                     </span>
                   </div>
 
                   <div className="fc-idcard-field">
-                    <span className="fc-idcard-label">📱 Username</span>
+                    <span className="fc-idcard-label">USERNAME</span>
                     <span className="fc-idcard-value">
                       @{user.username || "—"}
                     </span>
                   </div>
 
                   <div className="fc-idcard-field fc-field-technical">
-                    <span className="fc-idcard-label">🆔 FID</span>
+                    <span className="fc-idcard-label">FID NUMBER</span>
                     <span className="fc-idcard-value">
                       #{user.fid ?? "—"}
                     </span>
                   </div>
 
                   <div className="fc-idcard-field fc-field-technical">
-                    <span className="fc-idcard-label">⭐ Neynar Score</span>
+                    <span className="fc-idcard-label">NETWORK SCORE</span>
                     <span className="fc-idcard-value">
                       {user.neynarScore ? user.neynarScore.toFixed(2) : "—"}
                     </span>
@@ -357,7 +357,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                     <img src={qrCodeUrl} alt="QR Code" className="fc-qr-img" crossOrigin="anonymous" />
                   </div>
                   <span className="fc-idcard-qr-caption">
-                    Scan on Farcaster
+                    VERIFICATION CODE
                   </span>
                 </div>
               </div>
