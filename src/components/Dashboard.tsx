@@ -251,7 +251,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                   </div>
 
                   <div className="fc-idcard-field">
-                    <span className="fc-idcard-label">Account Created</span>
+                    <span className="fc-idcard-label">Date of Birth</span>
                     <span className="fc-idcard-value">
                       {user.dateOfBirth || "—"}
                     </span>
