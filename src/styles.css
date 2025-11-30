@@ -1066,6 +1066,25 @@ body {
   color: #9ca3af;
 }
 
+.fc-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 8px;
+  color: #10b981;
+  font-weight: 500;
+}
+
+.fc-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+  animation: pulse 2s infinite;
+}
+
 /* BODY INSIDE CARD */
 .fc-idcard-body {
   position: relative;
@@ -1184,6 +1203,59 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #9ca3af;
+}
+
+/* Enhanced Field Styles for Better Hierarchy */
+.fc-field-primary {
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.fc-field-primary .fc-idcard-label {
+  color: #c7d2fe;
+  font-weight: 600;
+}
+
+.fc-value-primary {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e5e7eb;
+  text-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
+}
+
+.fc-field-social {
+  background: rgba(34, 197, 94, 0.05);
+  border-radius: 6px;
+  padding: 3px 6px;
+  margin: 2px 0;
+  border: 1px solid rgba(34, 197, 94, 0.1);
+}
+
+.fc-field-social .fc-idcard-label {
+  color: #86efac;
+}
+
+.fc-field-social .fc-idcard-value {
+  color: #4ade80;
+  font-weight: 500;
+}
+
+.fc-field-technical {
+  background: rgba(168, 85, 247, 0.05);
+  border-radius: 6px;
+  padding: 3px 6px;
+  margin: 2px 0;
+  border: 1px solid rgba(168, 85, 247, 0.1);
+}
+
+.fc-field-technical .fc-idcard-label {
+  color: #c4b5fd;
+}
+
+.fc-field-technical .fc-idcard-value {
+  color: #a78bfa;
+  font-weight: 500;
 }
 
 .fc-score-badge {
@@ -1427,6 +1499,32 @@ body {
     border-radius: 0;
     max-width: 100%;
     height: 100vh;
+  }
+
+  .fc-idcard {
+    padding: 8px 8px 6px;
+  }
+
+  .fc-idcard-body {
+    gap: 6px;
+  }
+
+  .fc-idcard-photo-frame {
+    width: 50px;
+    height: 60px;
+  }
+
+  .fc-idcard-info-col {
+    gap: 3px;
+  }
+
+  .fc-field-primary .fc-idcard-value {
+    font-size: 12px;
+  }
+
+  .fc-score-badge {
+    font-size: 12px;
+    padding: 3px 8px;
   }
 }
 

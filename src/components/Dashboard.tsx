@@ -310,6 +310,10 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                   <div className="fc-idcard-subtitle">
                     Network: Base · Protocol: Farcaster
                   </div>
+                  <div className="fc-status-indicator">
+                    <span className="fc-status-dot"></span>
+                    Active on Farcaster
+                  </div>
                 </div>
               </div>
 
@@ -332,43 +336,43 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                 </div>
 
                 <div className="fc-idcard-info-col">
-                  <div className="fc-idcard-field">
-                    <span className="fc-idcard-label">Name</span>
-                    <span className="fc-idcard-value">
+                  <div className="fc-idcard-field fc-field-primary">
+                    <span className="fc-idcard-label">👤 Name</span>
+                    <span className="fc-idcard-value fc-value-primary">
                       {user.displayName || "—"}
                     </span>
                   </div>
 
                   <div className="fc-idcard-field">
-                    <span className="fc-idcard-label">Username</span>
+                    <span className="fc-idcard-label">📱 Username</span>
                     <span className="fc-idcard-value">
                       @{user.username || "—"}
                     </span>
                   </div>
 
-                  <div className="fc-idcard-field">
-                    <span className="fc-idcard-label">Followers</span>
+                  <div className="fc-idcard-field fc-field-social">
+                    <span className="fc-idcard-label">👥 Followers</span>
                     <span className="fc-idcard-value">
-                      {user.followersCount ?? "—"}
+                      {user.followersCount?.toLocaleString() ?? "—"}
                     </span>
                   </div>
 
-                  <div className="fc-idcard-field">
-                    <span className="fc-idcard-label">Following</span>
+                  <div className="fc-idcard-field fc-field-social">
+                    <span className="fc-idcard-label">❤️ Following</span>
                     <span className="fc-idcard-value">
-                      {user.followingCount ?? "—"}
+                      {user.followingCount?.toLocaleString() ?? "—"}
                     </span>
                   </div>
 
-                  <div className="fc-idcard-field">
-                    <span className="fc-idcard-label">FID</span>
+                  <div className="fc-idcard-field fc-field-technical">
+                    <span className="fc-idcard-label">🆔 FID</span>
                     <span className="fc-idcard-value">
                       #{user.fid ?? "—"}
                     </span>
                   </div>
 
-                  <div className="fc-idcard-field">
-                    <span className="fc-idcard-label">Neynar Score</span>
+                  <div className="fc-idcard-field fc-field-technical">
+                    <span className="fc-idcard-label">⭐ Neynar Score</span>
                     <div className="fc-idcard-value">
                       {user.neynarScore ? (
                         <div className="fc-score-with-badge">
