@@ -1055,14 +1055,14 @@ body {
 }
 
 .fc-idcard-title {
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.12em;
   color: #e5e7eb;
 }
 
 .fc-idcard-subtitle {
-  font-size: 10px;
+  font-size: 12px;
   color: #9ca3af;
 }
 
@@ -1071,7 +1071,7 @@ body {
   align-items: center;
   gap: 4px;
   margin-top: 4px;
-  font-size: 8px;
+  font-size: 10px;
   color: #10b981;
   font-weight: 500;
 }
