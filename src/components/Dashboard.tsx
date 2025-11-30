@@ -41,7 +41,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
   const [hoveredStat, setHoveredStat] = useState<string | null>(null);
   const [clickedStat, setClickedStat] = useState<string | null>(null);
   const [isHeaderHovered, setIsHeaderHovered] = useState(false);
-  const [floatingElements, setFloatingElements] = useState<Array<{id: number, x: number, y: number, emoji: string}>>([]);
+  const [bgTheme, setBgTheme] = useState('default');
 
   useEffect(() => {
     if (user.username) {
@@ -99,7 +99,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
   };
 
   return (
-    <div ref={ref} className="fc-app-root">
+    <div ref={ref} className={`fc-app-root ${bgTheme}`}>
       {/* Background decorative elements */}
       <div className="fc-bg-decoration fc-bg-decoration-1">🌟</div>
       <div className="fc-bg-decoration fc-bg-decoration-2">✨</div>
@@ -484,6 +484,33 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
             >
               <span className="fc-btn-icon">⬇️</span>
               <span>Download Card</span>
+            </button>
+
+            <button
+              className="fc-btn fc-btn-ghost"
+              type="button"
+              onClick={() => setBgTheme('default')}
+            >
+              <span className="fc-btn-icon">🌙</span>
+              <span>Default BG</span>
+            </button>
+
+            <button
+              className="fc-btn fc-btn-ghost"
+              type="button"
+              onClick={() => setBgTheme('light')}
+            >
+              <span className="fc-btn-icon">☀️</span>
+              <span>Light BG</span>
+            </button>
+
+            <button
+              className="fc-btn fc-btn-ghost"
+              type="button"
+              onClick={() => setBgTheme('colorful')}
+            >
+              <span className="fc-btn-icon">🌈</span>
+              <span>Colorful BG</span>
             </button>
             <div className="fc-actions-decoration fc-actions-decoration-right">💫</div>
           </div>
