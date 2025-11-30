@@ -19,4 +19,5 @@ export type DashboardUser = {
   location?: string;
   bio?: string;
   neynarScore?: number;
+  dateOfBirth?: string;
 };

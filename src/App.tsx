@@ -203,7 +203,14 @@ const App: React.FC = () => {
             neynarScore:
               typeof u.experimental?.neynar_user_score === "number"
                 ? u.experimental.neynar_user_score
-                : base.neynarScore
+                : base.neynarScore,
+            dateOfBirth: u.registered_at ? (() => {
+              const date = new Date(u.registered_at);
+              const day = String(date.getDate()).padStart(2, '0');
+              const month = String(date.getMonth() + 1).padStart(2, '0');
+              const year = String(date.getFullYear()).slice(-2);
+              return `${day}/${month}/${year}`;
+            })() : undefined
           };
         });
       }

@@ -165,6 +165,11 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
 
               <div className="fc-idcard-strip" />
 
+              {/* Top Right Logo */}
+              <div className="fc-idcard-top-right-logo">
+                <img src="/right.png" alt="Logo" className="fc-logo-img" crossOrigin="anonymous" />
+              </div>
+
               <div className="fc-idcard-header">
                 <div className="fc-idcard-logo">
                   <img src="/icon.png" alt="Farcaster ID" className="fc-idcard-logo-icon" crossOrigin="anonymous" />
@@ -243,6 +248,13 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                         "—"
                       )}
                     </div>
+                  </div>
+
+                  <div className="fc-idcard-field">
+                    <span className="fc-idcard-label">Account Created</span>
+                    <span className="fc-idcard-value">
+                      {user.dateOfBirth || "—"}
+                    </span>
                   </div>
                 </div>
 
