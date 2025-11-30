@@ -355,7 +355,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                       {user.neynarScore ? (
                         <div className="fc-score-with-badge">
                           <span className="fc-score-badge">
-                            ⭐ {user.neynarScore.toFixed(2)}
+                            {user.neynarScore.toFixed(2)}
                           </span>
                           <img
                             src="/farcaster-logo.png"
