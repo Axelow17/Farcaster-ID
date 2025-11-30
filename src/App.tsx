@@ -394,12 +394,23 @@ const App: React.FC = () => {
         const casts = user.castsCount ?? 0;
         const reactions = user.reactionsCount ?? 0;
         
+        // Format account creation date as "Month Year"
+        const accountDate = user.dateOfBirth ? (() => {
+          const date = new Date(user.dateOfBirth!.split('/').reverse().join('-')); // Convert dd/mm/yy to yy-mm-dd
+          return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        })() : null;
+        
         // Create engaging share text with all stats
         let shareText = `🚀 Farcaster ID Check! check my digital identity card 🪪✨\n\n`;
         shareText += `📊 Stats: Neynar Score ${score} | FID #${user.fid}\n`;
         shareText += `👥 ${followers} followers | ${following} following\n`;
         shareText += `📝 ${casts} casts | ${reactions} reactions\n`;
         shareText += `🏷️ @${user.username}`;
+        
+        // Add account creation date if available
+        if (accountDate) {
+          shareText += ` | 📅 Joined ${accountDate}`;
+        }
         
         // Add location if available
         if (user.location) {
