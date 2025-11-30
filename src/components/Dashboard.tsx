@@ -289,7 +289,7 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
               {/* VERIFIED Stamp on left side */}
               <div className="fc-idcard-stamp">
                 <div className="fc-stamp-content">
-                  <div className="fc-stamp-text">VERIFIED</div>
+                  <div className="fc-stamp-text">APPROVED</div>
                   <div className="fc-stamp-icon">✓</div>
                 </div>
               </div>
@@ -328,11 +328,6 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                         {user.displayName?.[0]?.toUpperCase() ?? "F"}
                       </div>
                     )}
-                  </div>
-                  <div className="fc-idcard-chip">
-                    <div className="fc-chip-line" />
-                    <div className="fc-chip-line fc-chip-line-short" />
-                    <div className="fc-chip-line" />
                   </div>
                 </div>
 
