@@ -206,10 +206,10 @@ const App: React.FC = () => {
                 : base.neynarScore,
             dateOfBirth: u.registered_at ? (() => {
               const date = new Date(u.registered_at);
-              const day = String(date.getDate()).padStart(2, '0');
-              const month = String(date.getMonth() + 1).padStart(2, '0');
-              const year = String(date.getFullYear()).slice(-2);
-              return `${day}/${month}/${year}`;
+              const day = date.getDate();
+              const month = date.toLocaleDateString('en-US', { month: 'long' });
+              const year = date.getFullYear();
+              return `${day} ${month} ${year}`;
             })() : undefined
           };
         });
