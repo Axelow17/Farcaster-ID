@@ -167,6 +167,8 @@ const App: React.FC = () => {
       const data = await userRes.json();
       const u = data.users?.[0];
       if (u) {
+        console.log("Neynar user data:", u); // Debug log
+        console.log("Registered at:", u.registered_at); // Debug log
         setUser((prev) => {
           const base = prev ?? {
             fid,
