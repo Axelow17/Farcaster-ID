@@ -286,14 +286,6 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
 
               <div className="fc-idcard-strip" />
 
-              {/* VERIFIED Stamp on left side */}
-              <div className="fc-idcard-stamp">
-                <div className="fc-stamp-content">
-                  <div className="fc-stamp-text">APPROVED</div>
-                  <div className="fc-stamp-icon">✓</div>
-                </div>
-              </div>
-
               {/* Top Right Logo */}
               <div className="fc-idcard-top-right-logo">
                 <img src="/right.png" alt="Logo" className="fc-logo-img" crossOrigin="anonymous" />
