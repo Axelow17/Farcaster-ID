@@ -450,6 +450,8 @@ body {
 
 /* Interactive Field Hover Effects */
 .fc-idcard-field {
+  display: flex;
+  flex-direction: column;
   transition: all 0.3s ease;
   padding: 2px;
   border-radius: 4px;
@@ -1196,12 +1198,13 @@ body {
 }
 
 .fc-idcard-value {
+  font-size: 11px;
   color: #e5e7eb;
   font-weight: bold;
 }
 
 .fc-idcard-label {
-  font-size: 9px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #9ca3af;
@@ -1221,7 +1224,7 @@ body {
 }
 
 .fc-value-primary {
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 600;
   color: #e5e7eb;
   text-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
@@ -1527,7 +1530,7 @@ body {
   }
 
   .fc-field-primary .fc-idcard-value {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .fc-score-badge {
