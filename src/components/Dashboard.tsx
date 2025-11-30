@@ -388,28 +388,6 @@ export const Dashboard = forwardRef<HTMLDivElement, DashboardProps>(({
                     </span>
                   </div>
 
-                  <div className="fc-idcard-field fc-field-technical">
-                    <span className="fc-idcard-label">⭐ Neynar Score</span>
-                    <div className="fc-idcard-value">
-                      {user.neynarScore ? (
-                        <div className="fc-score-with-badge">
-                          <span className="fc-score-badge">
-                            {user.neynarScore.toFixed(2)}
-                          </span>
-                          <img
-                            src="/farcaster-logo.png"
-                            alt="Neynar"
-                            className="fc-score-logo"
-                            crossOrigin="anonymous"
-                          />
-                        </div>
-                      ) : (
-                        "—"
-                      )}
-                    </div>
-                  </div>
-                </div>
-
                 <div className="fc-idcard-qr-col">
                   <div className="fc-idcard-qr">
                     <img src={qrCodeUrl} alt="QR Code" className="fc-qr-img" crossOrigin="anonymous" />

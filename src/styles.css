@@ -1203,7 +1203,7 @@ body {
 /* Info column */
 .fc-idcard-info-col {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 4px;
 }
 
@@ -1571,6 +1571,7 @@ body {
   }
 
   .fc-idcard-info-col {
+    flex-direction: row;
     gap: 3px;
   }
 
